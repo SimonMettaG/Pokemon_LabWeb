@@ -19,9 +19,12 @@ class CreatePokemons extends Migration
             $table->string('type1');
             $table->string('type2')->nullable();
             $table->string('move1');
-            $table->string('move2');
-            $table->string('move3');
-            $table->string('move4');
+            $table->string('move2')->nullable();
+            $table->string('move3')->nullable();
+            $table->string('move4')->nullable();
+            $table->string('item')->nullable();
+            $table->unsignedBigInteger('team_id');
+            $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
             $table->timestamps();
         });
     }
