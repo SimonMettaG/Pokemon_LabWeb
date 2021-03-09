@@ -24,4 +24,11 @@
         <input type="submit" value="Pokeapi">
     </div>
 </form>
+
+<form action="{{ route('pokeapi.getAll') }}" method="GET">
+    @csrf
+    <div>
+        <input type="submit" value="PokeapiAll">
+    </div>
+</form>
 @endsection

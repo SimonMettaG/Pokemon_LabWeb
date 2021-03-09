@@ -106,4 +106,16 @@ class TeamController extends Controller
         dd($poke ->{'name'});
         //dd($response);
     }
+
+    public function pokeapiAll(){
+        $api = new PokeApi;
+        $response = $api->resourceList('pokemon', '1118', '20');
+        $poke = json_decode($response);
+        $names = array();
+        foreach ($poke->{'results'} as $name) {
+            array_push($names,$name->{'name'});
+        }
+        dd($names);
+        return $names;
+    }
 }

@@ -27,6 +27,8 @@ Route::resource('teams', 'TeamController');
 
 Route::get('pokeapi', 'TeamController@pokeapi')->name('pokeapi.get');
 
+Route::get('pokeapi', 'TeamController@pokeapiAll')->name('pokeapi.getAll');
+
 Route::get('register', 'AuthController@register');
 Route::post('register', 'AuthController@doRegister')
     ->name('auth.do-register');
