@@ -63,6 +63,7 @@ class TeamController extends Controller
         $pokemon1 = new Pokemon();
 
 
+
         $pokemon1 = $arr["pokemon1"];
         $pokemon2 = $arr["pokemon2"];
         $pokemon3 = $arr["pokemon3"];
