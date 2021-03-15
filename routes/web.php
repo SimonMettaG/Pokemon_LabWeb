@@ -27,6 +27,7 @@ Route::resource('teams', 'TeamController');
 
 Route::get('pokeapi/{pokemon}', 'PokeapiController@pokeapi')->name('pokeapi.get');
 Route::get('pokeapi', 'PokeapiController@pokeapiAll')->name('pokeapi.getAll');
+Route::get('pokeapi2', 'PokeapiController@pokeapi')->name('pokeapi.getOne');
 
 Route::get('register', 'AuthController@register');
 Route::post('register', 'AuthController@doRegister')

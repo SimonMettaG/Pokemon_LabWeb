@@ -14,7 +14,7 @@ class PokeapiController extends Controller
         $response = $api->pokemon($name);
         //return($response);
         $poke = json_decode($response);
-        dd($poke ->{'name'});
+        dd($poke);
         //dd($response);
     }
 

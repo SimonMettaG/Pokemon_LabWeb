@@ -2,12 +2,17 @@
 
 namespace App\Models;
 
+use App\Models\Team;
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Pokemon extends Model
 {
     use HasFactory;
+    public function team(){
+        return $this->belongsTo(Team::class);
+    }
 
     protected $fillable = [
         'name',
@@ -18,7 +23,6 @@ class Pokemon extends Model
         'move3',
         'move4',
         'item',
-        'team_id'
     ];
 }
 
