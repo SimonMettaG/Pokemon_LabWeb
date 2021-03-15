@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Team;
+use App\Models\Pokemon;
+use Illuminate\Support\Facades\Auth;
 use PokePHP\PokeApi;
 
 class TeamController extends Controller
@@ -27,7 +29,15 @@ class TeamController extends Controller
      */
     public function create()
     {
-        return view('team_creation.create');
+        $api = new PokeApi;
+        $response = $api->resourceList('pokemon', '1118', '0');
+        $poke = json_decode($response);
+        $names = array();
+        foreach ($poke->{'results'} as $name) {
+            array_push($names,$name->{'name'});
+        }
+
+        return view('team_creation.create', ["pokemons" => $names]);
     }
 
     /**
@@ -38,12 +48,32 @@ class TeamController extends Controller
      */
     public function store(Request $request)
     {
-        //$arr = $request->input();
-        //dd($request);
-        $request->user()->teams()->create([
-            'name' => $request->name
-        ]);
-        
+        $arr = $request->input();
+        $team = new Team();
+        if($arr["name"] == null) {
+            $arr["name"] = "";
+        }
+
+        $userid = Auth::id();
+
+        $team->name = $arr["name"];
+        $team->user_id = $userid;
+        $team->save();
+
+        $pokemon1 = new Pokemon();
+
+
+        $pokemon1 = $arr["pokemon1"];
+        $pokemon2 = $arr["pokemon2"];
+        $pokemon3 = $arr["pokemon3"];
+        $pokemon4 = $arr["pokemon4"];
+        $pokemon5 = $arr["pokemon5"];
+        $pokemon6 = $arr["pokemon6"];
+
+        if($team_name == null) {
+            $team_name = "";
+        }
+
         return redirect()->route('teams.index');
     }
 
@@ -94,28 +124,5 @@ class TeamController extends Controller
     {
         $team->delete();
         return redirect()->route('teams.index');
-    }
-
-    public function pokeapi(Request $request){
-        $api = new PokeApi;
-        $arr = $request->input();
-        $name = $arr['name'];
-        $response = $api->pokemon($name);
-        //return($response);
-        $poke = json_decode($response);
-        dd($poke ->{'name'});
-        //dd($response);
-    }
-
-    public function pokeapiAll(){
-        $api = new PokeApi;
-        $response = $api->resourceList('pokemon', '1118', '20');
-        $poke = json_decode($response);
-        $names = array();
-        foreach ($poke->{'results'} as $name) {
-            array_push($names,$name->{'name'});
-        }
-        dd($names);
-        return $names;
     }
 }

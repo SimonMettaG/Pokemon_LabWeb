@@ -5,30 +5,48 @@
 <form action="{{ route('teams.store') }}" method="POST">
     @csrf
     <div>
-        <label for="">Name</label>
-        <input type="text" name="name">
+        <label for="">Nombre de Equipo:</label>
+        <input type="text" name="name" id="name">
+        <br>
+        <select name="pokemon1" id="pokemon1">
+            @foreach ($pokemons as $pokemon)
+                <option value="{{ $pokemon }}">{{ $pokemon }}</option>
+            @endforeach
+        </select>
+        <br>
+        <select name="pokemon2" id="pokemon2">
+            @foreach ($pokemons as $pokemon)
+                <option value="{{ $pokemon }}">{{ $pokemon }}</option>
+            @endforeach
+        </select>
+        <br>
+        <select name="pokemon3" id="pokemon3">
+            @foreach ($pokemons as $pokemon)
+                <option value="{{ $pokemon }}">{{ $pokemon }}</option>
+            @endforeach
+        </select>
+        <br>
+        <select name="pokemon4" id="pokemon4">
+            @foreach ($pokemons as $pokemon)
+                <option value="{{ $pokemon }}">{{ $pokemon }}</option>
+            @endforeach
+        </select>
+        <br>
+        <select name="pokemon5" id="pokemon5">
+            @foreach ($pokemons as $pokemon)
+                <option value="{{ $pokemon }}">{{ $pokemon }}</option>
+            @endforeach
+        </select>
+        <br>
+        <select name="pokemon6" id="pokemon6">
+            @foreach ($pokemons as $pokemon)
+                <option value="{{ $pokemon }}">{{ $pokemon }}</option>
+            @endforeach
+        </select>
     </div>
+    <br>
     <div>
-        <input type="submit" value="Store">
+        <input type="submit" value="Guardar Equipo">
     </div>
 </form>
 
-<h2> Agrega tus pokemons </h2>
-<form action="{{ route('pokeapi.get') }}" method="GET">
-    @csrf
-    <div>
-        <label for="">Name</label>
-        <input type="text" name="name">
-    </div>
-    <div>
-        <input type="submit" value="Pokeapi">
-    </div>
-</form>
-
-<form action="{{ route('pokeapi.getAll') }}" method="GET">
-    @csrf
-    <div>
-        <input type="submit" value="PokeapiAll">
-    </div>
-</form>
-@endsection
