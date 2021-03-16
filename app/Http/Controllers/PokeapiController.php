@@ -20,13 +20,13 @@ class PokeapiController extends Controller
 
     public function pokeapiAll(){
         $api = new PokeApi;
-        $response = $api->resourceList('pokemon', '1118', '20');
+        $response = $api->resourceList('pokemon', '1118', '0');
         $poke = json_decode($response);
         $names = array();
         foreach ($poke->{'results'} as $name) {
             array_push($names,$name->{'name'});
         }
-        dd($names);
+        #dd($names);
         return $names;
     }
 }
