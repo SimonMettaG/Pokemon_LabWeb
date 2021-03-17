@@ -20,7 +20,7 @@ class TeamController extends Controller
     public function index()
     {
         $teams = Team::all();
-        return view('team_creation.index', ['teams' => $teams, ]);
+        return view('team_creation.index', ['teams' => $teams,]);
     }
 
     /**
@@ -30,15 +30,9 @@ class TeamController extends Controller
      */
     public function create()
     {
-        $api = new PokeApi;
-        $response = $api->resourceList('pokemon', '1118', '0');
-        $poke = json_decode($response);
-        $names = array();
-        foreach ($poke->{'results'} as $name) {
-            array_push($names,$name->{'name'});
-        }
-        
-        return view('team_creation.create', ["pokemons" => $names, ]);
+        $pokemons = app('App\\Http\Controllers\PokeapiController')->pokeapiAll();
+       
+        return view('team_creation.create', ["pokemons" => $pokemons,]);
     }
 
     /**
@@ -93,10 +87,18 @@ class TeamController extends Controller
        
 
         $pokemons = app('App\\Http\Controllers\PokeapiController')->pokeapiAll();
+
     
         
         $team_members = Pokemon::where("team_id", $team->id)->get();
-        return view('team_creation.edit', ['team' => $team, 'team_members' => $team_members, 'pokemons' => $pokemons]);
+        $members_info = array();
+        foreach ($team_members as $member) {
+            $info = app('App\\Http\Controllers\PokeapiController')->pokeapi($member->name);
+            array_push($members_info, $info);
+            
+        }
+        return view('team_creation.edit', ['team' => $team, 'team_members' => $team_members, 'pokemons' => $pokemons, 'members_info' => $members_info]);
+        #return redirect()->route('teams.index');
     }
 
     /**
@@ -121,7 +123,13 @@ class TeamController extends Controller
     {
         $pokemons = app('App\\Http\Controllers\PokeapiController')->pokeapiAll();
         $team_members = Pokemon::where("team_id", $team->id)->get();
-        return view('team_creation.edit', ['team' => $team, 'team_members' => $team_members, 'pokemons' => $pokemons]);
+        $members_info = array();
+        foreach ($team_members as $member) {
+            $info = app('App\\Http\Controllers\PokeapiController')->pokeapi($member->name);
+            array_push($members_info, $info);
+            
+        }
+        return view('team_creation.edit', ['team' => $team, 'team_members' => $team_members, 'pokemons' => $pokemons, 'members_info' => $members_info]);
     }
 
     /**

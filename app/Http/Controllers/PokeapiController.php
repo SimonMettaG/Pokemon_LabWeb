@@ -7,15 +7,13 @@ use PokePHP\PokeApi;
 
 class PokeapiController extends Controller
 {
-    public function pokeapi(Request $request){
+    public function pokeapi($string){
         $api = new PokeApi;
-        $arr = $request->input();
-        $name = $arr['name'];
-        $response = $api->pokemon($name);
-        //return($response);
+        $response = $api->pokemon($string);
         $poke = json_decode($response);
-        dd($poke);
+        //dd($poke);
         //dd($response);
+        return $poke;
     }
 
     public function pokeapiAll(){
