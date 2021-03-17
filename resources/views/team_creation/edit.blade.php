@@ -30,47 +30,46 @@
                 <th>Item</th>
             </thead>
             <tbody>
-                
-                @foreach ($members_info as $member_info)
+                @for ($i = 0; $i < count($members_info); $i++)
                 <tr>
-                    <form action="{{ route('teams.store') }}" method="POST">
+                    <form action="{{ route('pokemon.update', ['pokemon' => $team_members[$i]->id]) }}" method="POST">
                        @csrf
-                    <td>{{$member_info->name}}</td>
+                    <td>{{$members_info[$i]->name}}</td>
                     <td>
                         <select name="{{"pokemon"}}" id="{{"pokemon"}}">
                             @foreach ($pokemons as $pokemon)
                                 <option value="{{ $pokemon }}">{{ $pokemon }}</option>
                             @endforeach</select>
                     </td>
-                    <td>{{ $member_info->types[0]->type->name}}</td>
+                    <td>{{ $members_info[$i]->types[0]->type->name}}</td>
                     <td>
-                        @if (count($member_info->types)>1)
-                        {{$member_info->types[1]->type->name}}
+                        @if (count($members_info[$i]->types)>1)
+                        {{$members_info[$i]->types[1]->type->name}}
                         @else
                         null
                         @endif
                     </td>
                     <td>
                         <select name="{{"move1"}}" id="{{"move1" }}">
-                            @foreach ($member_info->moves as $move)
+                            @foreach ($members_info[$i]->moves as $move)
                                 <option value="{{ $move->move->name }}">{{ $move->move->name }}</option>
                             @endforeach</select>
                     </td>
                     <td>
                         <select name="{{"move2"}}" id="{{"move2" }}">
-                            @foreach ($member_info->moves as $move)
+                            @foreach ($members_info[$i]->moves as $move)
                                 <option value="{{ $move->move->name }}">{{ $move->move->name }}</option>
                             @endforeach</select>
                     </td>
                     <td>
                         <select name="{{"move3"}}" id="{{"move3" }}">
-                            @foreach ($member_info->moves as $move)
+                            @foreach ($members_info[$i]->moves as $move)
                                 <option value="{{ $move->move->name }}">{{ $move->move->name }}</option>
                             @endforeach</select>
                     </td>
                     <td>
                         <select name="{{"move4"}}" id="{{"move4" }}">
-                            @foreach ($member_info->moves as $move)
+                            @foreach ($members_info[$i]->moves as $move)
                                 <option value="{{ $move->move->name }}">{{ $move->move->name }}</option>
                             @endforeach</select>
                     </td>
@@ -84,7 +83,7 @@
                     </form>
                 </td>
                 </tr>   
-                @endforeach
+                @endfor
             </tbody>
         </table>
     </div>
