@@ -105,7 +105,6 @@ class TeamController extends Controller
             
         }
         return view('team_creation.edit', ['team' => $team, 'team_members' => $team_members, 'pokemons' => $pokemons, 'members_info' => $members_info]);
-        #return redirect()->route('teams.index');
     }
 
     /**

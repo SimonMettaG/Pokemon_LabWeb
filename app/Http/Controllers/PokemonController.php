@@ -11,7 +11,6 @@ class PokemonController extends Controller
     public function update(Request $request, Pokemon $pokemon)
     {
         $arr = $request->input();
-        #dd($arr);
         $info = app('App\\Http\Controllers\PokeapiController')->pokeapi($pokemon->name);
         $type1 = $info->types[0]->type->name;
 
