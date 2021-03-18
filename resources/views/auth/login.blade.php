@@ -22,4 +22,7 @@
         <br>
         <input type="submit" value="Inicio de sesión">
     </form>
+    <form action="{{ route('auth.register') }}" >
+        <button>Register</button>
+    </form>
 @endsection

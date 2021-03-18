@@ -23,15 +23,24 @@ Route::get('/pokemon', function () {
 });
 
 
-Route::resource('teams', 'TeamController');
+Route::resource('teams', 'TeamController')
+                                    ->middleware('logged');
 
-Route::get('pokeapi/{pokemon}', 'PokeapiController@pokeapi')->name('pokeapi.get');
-Route::get('pokeapi', 'PokeapiController@pokeapiAll')->name('pokeapi.getAll');
-Route::get('pokeapi2', 'PokeapiController@pokeapi')->name('pokeapi.getOne');
+Route::get('pokeapi/{pokemon}', 'PokeapiController@pokeapi')
+                                    ->middleware('logged')
+                                    ->name('pokeapi.get');
+Route::get('pokeapi', 'PokeapiController@pokeapiAll')
+                                    ->middleware('logged')
+                                    ->name('pokeapi.getAll');
+Route::get('pokeapi2', 'PokeapiController@pokeapi')
+                                    ->middleware('logged')
+                                    ->name('pokeapi.getOne');
 
-Route::post('pokemonUpdate/{pokemon}', 'PokemonController@update')->name('pokemon.update');
+Route::post('pokemonUpdate/{pokemon}', 'PokemonController@update')
+                                    ->middleware('logged')
+                                    ->name('pokemon.update');
 
-Route::get('register', 'AuthController@register');
+Route::get('register', 'AuthController@register')->name('auth.register');
 Route::post('register', 'AuthController@doRegister')
     ->name('auth.do-register');
 Route::get('login', 'AuthController@login')

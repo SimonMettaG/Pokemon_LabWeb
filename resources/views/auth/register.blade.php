@@ -16,9 +16,6 @@
         <label for="">Nombre</label>
         <input type="text" name="name" id="">
         <br>
-        <label for="">Role</label>
-        <input type="text" name="role" id="">
-        <br>
         <label for="">Email</label>
         <input type="text" name="email" id="">
         <br>

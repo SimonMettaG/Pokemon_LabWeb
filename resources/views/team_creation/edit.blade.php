@@ -41,8 +41,8 @@
                                 <option value="{{ $pokemon }}">{{ $pokemon }}</option>
                             @endforeach</select>
                     </td>
-                    <td>{{ $members_info[$i]->types[0]->type->name}}</td>
-                    <td>
+                    <td name="type1" id="type1">{{ $members_info[$i]->types[0]->type->name}}</td>
+                    <td name="type2" id="type2">
                         @if (count($members_info[$i]->types)>1)
                         {{$members_info[$i]->types[1]->type->name}}
                         @else

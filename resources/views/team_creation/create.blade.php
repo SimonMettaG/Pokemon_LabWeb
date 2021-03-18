@@ -50,14 +50,3 @@
         <input type="submit" value="Guardar Equipo">
     </div>
 </form>
-
-<form action="{{ route('pokeapi.getOne') }}" method="GET">
-    @csrf
-    <div>
-        <label for="">Name</label>
-        <input type="text" name="name">
-    </div>
-    <div>
-        <input type="submit" value="Pokeapi">
-    </div>
-</form>

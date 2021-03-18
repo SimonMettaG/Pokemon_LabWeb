@@ -19,7 +19,7 @@ class TeamController extends Controller
      */
     public function index()
     {
-        $teams = Team::all();
+        $teams = auth()->user()->teams()->paginate();
         return view('team_creation.index', ['teams' => $teams,]);
     }
 
@@ -71,11 +71,18 @@ class TeamController extends Controller
         array_push($pokemonArray,$pokemon6);
         
         foreach ($pokemonArray as $pokemon) {
+            $info = app('App\\Http\Controllers\PokeapiController')->pokeapi($pokemon);
+            if (count($info->types)>1) {
+                $type2 = $info->types[1]->type->name;
+            }
+            else {
+                $type2 = "null";
+            }
             $team->pokemons()->create([
             
                 'name' => $pokemon,
-                'type1' => " ",
-                'type2' => " ",
+                'type1' => $info->types[0]->type->name,
+                'type2' => $type2,
                 'move1' => " ",
                 'move2' => " ",
                 'move3' => " ",

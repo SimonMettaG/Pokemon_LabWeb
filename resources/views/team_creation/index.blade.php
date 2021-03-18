@@ -4,9 +4,7 @@
 <h1>List of teams</h1>
 <p>
     @auth
-        {{ auth()->user()->email }}
         <a href="{{ route('teams.create') }}">Create a team</a>
-        <a href="{{ route('auth.logout') }}">Logout</a>
     @endauth
 </p>
 <table>
