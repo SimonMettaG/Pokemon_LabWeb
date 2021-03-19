@@ -15,7 +15,8 @@ use App\Http\Controllers\TeamController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    #return view('welcome');
+    return view('/auth.login');
 });
 
 Route::get('/pokemon', function () {
