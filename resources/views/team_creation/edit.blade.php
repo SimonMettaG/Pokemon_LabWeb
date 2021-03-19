@@ -92,7 +92,7 @@
                     </td>
                     <td class="col">
                         <div>
-                            <input type="submit" value="Guardar Equipo" class="btn btn-success">
+                            <input type="submit" value="Save Pokemon" class="btn btn-success">
                         </div>
                     </td>
                 </form>

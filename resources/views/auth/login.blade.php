@@ -16,7 +16,7 @@
 			<div class="card border border-dark">
 				<div class="card-body">
 					<div class="text-center">
-						<h1>Inicio de sesión</h1>
+						<h1>Sign In</h1>
 					</div>
 					<form action="{{ route('auth.do-login') }}" method="POST">
                         @csrf
@@ -27,7 +27,7 @@
 						<input type="password" class="form-control" id="" name="password">
 						<br>
 						<div class="text-center">
-							<input type="submit" value="Inicio de sesión" class="btn btn-primary">
+							<input type="submit" value="Sign In" class="btn btn-primary">
 						</div>
 					</form>
 				</div>
@@ -40,8 +40,8 @@
 					<div class="text-center">
 						<form action="{{ route('auth.register') }}">
                             @csrf
-							<h5 class="card-title">¿No tienes cuenta? Registrate.</h5>
-							<input type="submit" value="Registrarse" class="btn btn-info">
+							<h5 class="card-title">Don't have an account? Register.</h5>
+							<input type="submit" value="Register" class="btn btn-info">
 						</form>
 					</div>
 				</div>

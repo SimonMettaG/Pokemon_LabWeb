@@ -80,7 +80,7 @@
                 </div>
                 <br>
                 <div class="text-center">
-                    <input type="submit" value="Guardar Equipo" class="btn btn-success">
+                    <input type="submit" value="Create Team" class="btn btn-success">
                 </div>
             </form>
         </div>
