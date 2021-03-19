@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('content')
-    <div style="height: 100%; width: 100%; background-image: url('https://www.itl.cat/pngfile/big/0-2455_hd-all-pokemon-wallpaper-hd-desktop-wallpapers-1080p.jpg'); position: fixed">
+    <div style="height: 100%; width: 100%; background-image: url('https://www.itl.cat/pngfile/big/0-2455_hd-all-pokemon-wallpaper-hd-desktop-wallpapers-1080p.jpg'); position: fixed; background-size: cover">
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
