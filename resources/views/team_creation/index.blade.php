@@ -1,40 +1,44 @@
 @extends('layouts.main')
 
 @section('content')
-<h1>List of teams</h1>
-<p>
+
+<div class="text-center">
+    <h1>List of teams</h1>
+    <br>
     @auth
-        <a href="{{ route('teams.create') }}">Create a team</a>
+        <a href="{{ route('teams.create') }}" class="btn btn-success">Create a team</a>
     @endauth
-</p>
-<table>
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Name</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($teams as $item)
+</div>
+
+<div class="container">
+    <table class="table">
+        <thead>
             <tr>
-                <td>{{ $item->id }}</td>
-                <td>{{ $item->name }}</td>
-                <td>
-                    <a href="{{ route('teams.show', ['team' => $item]) }}">
-                        Show
-                    </a> |
-                    <a href="{{ route('teams.edit', ['team' => $item]) }}">
-                        Update
-                    </a>
-                    <form action="{{ route('teams.destroy', ['team' => $item]) }}" method="post">
-                        @csrf
-                        @method('DELETE')
-                        <input type="submit" value="Delete">
-                    </form>
-                </td>
+                <th class="col">#</th>
+                <th class="col">Name</th>
+                <th></th>
+                <th></th>
+                <th></th>
             </tr>
-        @endforeach
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach ($teams as $item)
+                <tr>
+                    <td class="col">{{ $item->id }}</td>
+                    <td class="col">{{ $item->name }}</td>
+                    <td class="col"><a href="{{ route('teams.show', ['team' => $item]) }}" class="btn btn-primary">Show</a></td>
+                    <td class="col"><a href="{{ route('teams.edit', ['team' => $item]) }}" class="btn btn-secondary">Update</a></td>
+                    <td class="col">
+                        <form action="{{ route('teams.destroy', ['team' => $item]) }}" method="post">
+                            @csrf
+                            @method('DELETE')
+                            <input type="submit" value="Delete" class="btn btn-danger">
+                        </form>
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
 
 @endsection
