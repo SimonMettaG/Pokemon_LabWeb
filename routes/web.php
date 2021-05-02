@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TeamController;
+use App\Events\StartFight;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,8 +20,18 @@ Route::get('/', function () {
     return view('/auth.login');
 });
 
+Route::get('/welcome', function () {
+    return view('welcome');
+    #return view('/auth.login');
+});
+
 Route::get('/pokemon', function () {
     return view('layouts/main');
+});
+
+Route::get('/test', function () {
+    StartFight::dispatch('Someone');
+    return "Event has been sent";
 });
 
 
@@ -40,6 +51,12 @@ Route::get('pokeapi2', 'PokeapiController@pokeapi')
 Route::post('pokemonUpdate/{pokemon}', 'PokemonController@update')
                                     ->middleware('logged')
                                     ->name('pokemon.update');
+
+Route::get('fightroom/{team}', 'FightController@room')
+    ->name('fight.fightroom');
+
+Route::get('fightMessage', 'FightController@fetchMessages')->name('fight.fightMessage');;
+Route::post('fightMessage', 'FightController@sendMessage')->name('fight.postFightMessage');;
 
 Route::get('register', 'AuthController@register')->name('auth.register');
 Route::post('register', 'AuthController@doRegister')

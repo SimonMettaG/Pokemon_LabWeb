@@ -6,7 +6,8 @@
     <h1>List of teams</h1>
     <br>
     @auth
-        <a href="{{ route('teams.create') }}" class="btn btn-success">Create a team</a>
+    <input type="text" name="message" id="message">
+        <input type="button" value="Enviar" onclick="sendMessage()">
     @endauth
 </div>
 
@@ -23,7 +24,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($teams as $item)
+            @foreach ($team as $item)
                 <tr>
                     <td class="col">{{ $item->id }}</td>
                     <td class="col">{{ $item->name }}</td>
@@ -44,3 +45,39 @@
 </div>
 
 @endsection
+
+@push('layout_end_body')
+
+<script>
+    function sendMessage() {
+        console.log($('#message'));
+        let theDescription = $('#message').val();
+        $.ajax({
+            url: '{{ route('fight.postFightMessage') }}',
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: {
+                message: theDescription
+            }
+        })
+        .done(function(response) {
+            $('#message').val('');
+
+
+            console.log(response);
+        })
+        .fail(function(jqXHR, response) {
+            console.log('Fallido', response);
+        });
+    }
+
+    Echo.private('chat')
+        .listen('MessageSent', function(data) {
+            console.log(data);
+        });
+</script>
+
+@endpush

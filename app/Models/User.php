@@ -13,6 +13,10 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
+    public function messages(){
+        return $this->hasMany(Message::class);
+    }
+
     public function teams(){
         return $this->hasMany(Team::class);
     }
