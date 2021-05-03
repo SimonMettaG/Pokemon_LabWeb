@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Team;
 use App\Models\Message;
 use App\Events\MessageSent;
+use App\Events\JoinedRoom;
+use App\Events\ReceivePokemon;
 
 
 class FightController extends Controller
@@ -17,16 +19,26 @@ class FightController extends Controller
 
     public function room(Team $team)
     {
-        //dd($team);
-        $team = [$team];
-        return view('fight.fightroom', ['team' => $team, 'roomId' => 5]);
+        $pokemons = $team->pokemons()->paginate(6);
+
+        return view('fight.fightroom', ['team' => $team, 'roomId' => 5, 'pokemons' => $pokemons]);
     }
 
     public function joinRoom(Request $request, Team $team)
     {
-        //dd($team);
-        $team = [$team];
-        return view('fight.fightroom', ['team' => $team, 'roomId' => $request->input('roomId')]);
+        $user = auth()->user();
+        $pokemons = $team->pokemons()->paginate(6);
+        broadcast(new JoinedRoom($user, $team, $request->input('roomId')))->toOthers();
+        return view('fight.fightroom', ['team' => $team, 'roomId' => $request->input('roomId'), 'pokemons' => $pokemons]);
+    }
+
+    public function receive(Request $request)
+    {
+        $user = auth()->user();
+        $teamJson=$request->input('team');
+        $team=Team::find($teamJson['id']);
+        broadcast(new ReceivePokemon($user, $team, $request->input('roomId')))->toOthers();
+        return response()->json($user);
     }
 
     public function select(Team $team)

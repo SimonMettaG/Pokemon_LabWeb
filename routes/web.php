@@ -61,8 +61,10 @@ Route::get('fightroom/{team}', 'FightController@room')
 Route::get('fightjoin/{team}', 'FightController@joinRoom')
     ->name('fight.fightjoin');
 
-Route::get('fightMessage', 'FightController@fetchMessages')->name('fight.fightMessage');;
-Route::post('fightMessage', 'FightController@sendMessage')->name('fight.postFightMessage');;
+Route::get('fightMessage', 'FightController@fetchMessages')->name('fight.fightMessage');
+Route::post('fightMessage', 'FightController@sendMessage')->name('fight.postFightMessage');
+
+Route::post('fightReceive', 'FightController@receive')->name('fight.receive');
 
 Route::get('register', 'AuthController@register')->name('auth.register');
 Route::post('register', 'AuthController@doRegister')

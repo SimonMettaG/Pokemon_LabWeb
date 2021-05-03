@@ -24,22 +24,21 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($team as $item)
                 <tr>
-                    <td class="col">{{ $item->id }}</td>
-                    <td class="col">{{ $item->name }}</td>
-                    <td class="col"><a href="{{ route('teams.show', ['team' => $item]) }}" class="btn btn-primary">Show</a></td>
-                    <td class="col"><a href="{{ route('teams.edit', ['team' => $item]) }}" class="btn btn-secondary">Update</a></td>
+                    <td class="col">{{ $team->id }}</td>
+                    <td class="col">{{ $team->name }}</td>
+                    <td class="col"><a href="{{ route('teams.show', ['team' => $team]) }}" class="btn btn-primary">Show</a></td>
+                    <td class="col"><a href="{{ route('teams.edit', ['team' => $team]) }}" class="btn btn-secondary">Update</a></td>
                     <td class="col">
-                        <form action="{{ route('teams.destroy', ['team' => $item]) }}" method="post">
+                        <form action="{{ route('teams.destroy', ['team' => $team]) }}" method="post">
                             @csrf
                             @method('DELETE')
                             <input type="submit" value="Delete" class="btn btn-danger">
                         </form>
                     </td>
-                    <td class="col"><a href="{{ route('fight.fightroom', ['team' => $item]) }}" class="btn btn-info">Fight</a></td>
+                    <td class="col"><a href="{{ route('fight.fightroom', ['team' => $team]) }}" class="btn btn-info">Fight</a></td>
                 </tr>
-            @endforeach
+            
         </tbody>
     </table>
 </div>
@@ -49,8 +48,9 @@
 @push('layout_end_body')
 
 <script>
-    var roomId = {!! json_encode($roomId) !!}
-    console.log(roomId);
+    var roomId = {!! json_encode($roomId) !!};
+    var team = {!! json_encode($team) !!};
+    console.log(team);
     function sendMessage(roomId) {
         let theDescription = $('#message').val();
         $.ajax({
@@ -78,6 +78,46 @@
 
     Echo.private("chat."+roomId)
         .listen('MessageSent', function(data) {
+            console.log(data);
+        });
+    
+    Echo.join("join."+roomId)
+        .here((users) => {
+            console.log(users)
+        })
+        .joining((user) => {
+            console.log(user.id);
+            $.ajax({
+                url: '{{ route('fight.receive') }}',
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    team: team,
+                    roomId: roomId
+                }
+            })
+            .done(function(response) {
+                console.log(response);
+            })
+            .fail(function(jqXHR, response) {
+                console.log('Fallido', response);
+            });
+        })
+        .leaving((user) => {
+            console.log(user.id);
+        })
+        .listen('JoinedRoom', function(data) {
+            console.log(data);
+        })
+        .error((error) => {
+            console.error(error);
+        });
+    
+    Echo.private("receive."+roomId)
+        .listen('ReceivePokemon', function(data) {
             console.log(data);
         });
 </script>

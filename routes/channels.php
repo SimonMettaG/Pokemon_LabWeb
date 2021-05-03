@@ -18,5 +18,13 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 });
 
 Broadcast::channel('chat.{roomId}', function ($user, $roomId) {
-    return true;
+    return Auth::check();
+  });
+
+Broadcast::channel('join.{roomId}', function ($user, $roomId) {
+    return ['id' => $user->id, 'name' => $user->name];
+  });
+
+Broadcast::channel('receive.{roomId}', function ($user, $roomId) {
+    return Auth::check();
   });
