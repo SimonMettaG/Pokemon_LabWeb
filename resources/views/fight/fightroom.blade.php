@@ -7,7 +7,7 @@
     <br>
     @auth
     <input type="text" name="message" id="message">
-        <input type="button" value="Enviar" onclick="sendMessage()">
+        <input type="button" value="Enviar" onclick="sendMessage({{$roomId}})">
     @endauth
 </div>
 
@@ -49,8 +49,9 @@
 @push('layout_end_body')
 
 <script>
-    function sendMessage() {
-        console.log($('#message'));
+    var roomId = {!! json_encode($roomId) !!}
+    console.log(roomId);
+    function sendMessage(roomId) {
         let theDescription = $('#message').val();
         $.ajax({
             url: '{{ route('fight.postFightMessage') }}',
@@ -60,7 +61,8 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             data: {
-                message: theDescription
+                message: theDescription,
+                roomId: roomId
             }
         })
         .done(function(response) {
@@ -74,7 +76,7 @@
         });
     }
 
-    Echo.private('chat')
+    Echo.private("chat."+roomId)
         .listen('MessageSent', function(data) {
             console.log(data);
         });

@@ -36,7 +36,7 @@
                             <input type="submit" value="Delete" class="btn btn-danger">
                         </form>
                     </td>
-                    <td class="col"><a href="{{ route('fight.fightroom', ['team' => $item]) }}" class="btn btn-info">Fight</a></td>
+                    <td class="col"><a href="{{ route('fight.fightselect', ['team' => $item]) }}" class="btn btn-info">Fight</a></td>
                 </tr>
             @endforeach
         </tbody>

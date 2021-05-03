@@ -52,8 +52,14 @@ Route::post('pokemonUpdate/{pokemon}', 'PokemonController@update')
                                     ->middleware('logged')
                                     ->name('pokemon.update');
 
+Route::get('fightselect/{team}', 'FightController@select')
+    ->name('fight.fightselect');
+
 Route::get('fightroom/{team}', 'FightController@room')
     ->name('fight.fightroom');
+
+Route::get('fightjoin/{team}', 'FightController@joinRoom')
+    ->name('fight.fightjoin');
 
 Route::get('fightMessage', 'FightController@fetchMessages')->name('fight.fightMessage');;
 Route::post('fightMessage', 'FightController@sendMessage')->name('fight.postFightMessage');;

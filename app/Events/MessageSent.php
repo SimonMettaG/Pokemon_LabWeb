@@ -24,16 +24,18 @@ class MessageSent implements ShouldBroadcast
      * @var Message
      */
     public $message;
+    public $roomId;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(User $user, Message $message)
+    public function __construct(User $user, Message $message, $roomId)
     {
         $this->user = $user;
         $this->message = $message;
+        $this->roomId = $roomId;
     }
 
     /**
@@ -43,6 +45,6 @@ class MessageSent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('chat');
+        return new PrivateChannel('chat.'.$this->roomId);
     }
 }

@@ -19,7 +19,20 @@ class FightController extends Controller
     {
         //dd($team);
         $team = [$team];
-        return view('fight.fightroom', ['team' => $team]);
+        return view('fight.fightroom', ['team' => $team, 'roomId' => 5]);
+    }
+
+    public function joinRoom(Request $request, Team $team)
+    {
+        //dd($team);
+        $team = [$team];
+        return view('fight.fightroom', ['team' => $team, 'roomId' => $request->input('roomId')]);
+    }
+
+    public function select(Team $team)
+    {
+        $pokemons = $team->pokemons()->paginate(6);
+        return view('fight.fightselect', ['team' => $team, 'pokemons' => $pokemons]);
     }
 
     public function fetchMessages()
@@ -35,7 +48,7 @@ class FightController extends Controller
             'message' => $request->input('message')
         ]);
 
-        broadcast(new MessageSent($user, $message));
+        broadcast(new MessageSent($user, $message, $request->input('roomId')));
 
         return ['status' => 'Message Sent!'];
     }
