@@ -10,13 +10,13 @@
     <br>
     <div class="container">
         <div class="row">
-            <div class="col" style="border: 1px black solid; background-color: white;">
+            <div class="col" style="border: 1px black solid;">
                 <div class="container">
                     <div style="text-align: center;"><h2>Team: {{$team->name}}</h2></div>
                     <br>
                     <div class="row">
                         <div class="col">
-                            <img src="{{$pokemons[0]->image}}" alt="" class="rounded" style="border: 1px black solid;" height="200px" width="200px">
+                            <img src="{{$pokemons[0]->image}}" alt="" class="rounded" style="border: 1px black solid; background-color: white;" height="200px" width="200px">
                         </div>
                         <div class="col text-center">
                             <div class="row" style="margin-top: 5px;">
@@ -51,7 +51,7 @@
                     <div class="row" style="margin-left: -20px; margin-right: auto;">
                         @for ($i = 1; $i < 6; $i++)
                         <div class="col col-2" style="margin-left: auto;">
-                            <button class="btn btn-white">
+                            <button class="btn btn-white" style="backrground-color: white">
                                 <img src="{{$pokemons[$i]->image}}" alt="" class="rounded" style="border: 1px black solid;" height="50px" width="50px">
                                 <p style="font-size: x-small;">{{$pokemons[$i]->name}}<br>HP [100/100]<br><br>{{$pokemons[$i]->move1}}<br>{{$pokemons[$i]->move2}}<br>{{$pokemons[$i]->move3}}<br>{{$pokemons[$i]->move4}}</p>
                             </button>
@@ -71,7 +71,7 @@
                     <button class="btn btn-danger">GIVE UP</button>
                 </div>
             </div>
-            <div class="col" style="border: 1px black solid; background-color: white;">
+            <div class="col" style="border: 1px black solid;">
                 <div class="container">
                     <div style="text-align: center;"><h2 id="teamName">Team: [enemy team]</h2></div>
                     <br>
