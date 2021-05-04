@@ -23,6 +23,7 @@ class CreatePokemon extends Migration
             $table->string('move3')->nullable();
             $table->string('move4')->nullable();
             $table->string('item')->nullable();
+            $table->string('image')->nullable();
             $table->unsignedBigInteger('team_id');
             $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
             $table->timestamps();

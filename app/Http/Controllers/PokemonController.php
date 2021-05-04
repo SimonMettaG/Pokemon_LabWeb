@@ -14,7 +14,6 @@ class PokemonController extends Controller
         $pokemon->name = $arr['pokemon'];
         $info = app('App\\Http\Controllers\PokeapiController')->pokeapi($pokemon->name);
         $type1 = $info->types[0]->type->name;
-
         if (count($info->types)>1) {
             $type2 = $info->types[1]->type->name;
         }
@@ -27,6 +26,7 @@ class PokemonController extends Controller
         $pokemon->move2 = $arr['move2'];
         $pokemon->move3 = $arr['move3'];
         $pokemon->move4 = $arr['move4'];
+        $pokemon->image = $info->sprites->front_default;
         #$pokemon->item = $arr['item'];
         $pokemon->save();
         return back();

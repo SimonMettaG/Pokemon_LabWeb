@@ -83,12 +83,12 @@ class TeamController extends Controller
                 'name' => $pokemon,
                 'type1' => $info->types[0]->type->name,
                 'type2' => $type2,
-                'move1' => " ",
-                'move2' => " ",
-                'move3' => " ",
-                'move4' => " ",
+                'move1' => $info->moves[0]->move->name,
+                'move2' => $info->moves[1]->move->name,
+                'move3' => $info->moves[2]->move->name,
+                'move4' => $info->moves[3]->move->name,
                 'item' => " ",
-            
+                'image' => $info->sprites->front_default
             ],);
         }
        
