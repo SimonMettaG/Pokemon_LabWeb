@@ -87,7 +87,6 @@ class TeamController extends Controller
                 'move2' => $info->moves[1]->move->name,
                 'move3' => $info->moves[2]->move->name,
                 'move4' => $info->moves[3]->move->name,
-                'item' => " ",
                 'image' => $info->sprites->front_default
             ],);
         }
@@ -150,7 +149,7 @@ class TeamController extends Controller
         $arr = $request->input();
         $team->name = $arr['name'];
         $team->save();
-        return redirect()->route('teams.index');
+        return back();
     }
 
     /**

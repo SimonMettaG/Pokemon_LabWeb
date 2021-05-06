@@ -22,7 +22,6 @@ class Pokemon extends Model
         'move2',
         'move3',
         'move4',
-        'item',
         'image'
     ];
 }

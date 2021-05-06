@@ -20,7 +20,6 @@
                 <th class="col">Move2</th>
                 <th class="col">Move3</th>
                 <th class="col">Move4</th>
-                <th class="col">Item</th>
             </tr>
         </thead>
         <tbody>
@@ -33,7 +32,6 @@
                 <td class="col">{{$pokemon->move2}}</td>
                 <td class="col">{{$pokemon->move3}}</td>
                 <td class="col">{{$pokemon->move4}}</td>
-                <td class="col">{{$pokemon->item}}</td>
             </tr>
             @endforeach
         </tbody>

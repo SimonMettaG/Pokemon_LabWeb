@@ -48,9 +48,12 @@ Route::get('pokeapi2', 'PokeapiController@pokeapi')
                                     ->middleware('logged')
                                     ->name('pokeapi.getOne');
 
-Route::post('pokemonUpdate/{pokemon}', 'PokemonController@update')
+Route::post('pokemonUpdate/{pokemon}/{id}', 'PokemonController@update')
                                     ->middleware('logged')
                                     ->name('pokemon.update');
+
+Route::post('pokemonMoves', 'PokemonController@moves')
+    ->name('pokemon.moves');
 
 Route::get('fightselect/{team}', 'FightController@select')
     ->name('fight.fightselect');
