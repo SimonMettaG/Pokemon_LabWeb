@@ -19,9 +19,10 @@ class FightController extends Controller
 
     public function room(Team $team)
     {
+        $user = auth()->user();
         $pokemons = $team->pokemons()->paginate(6);
 
-        return view('fight.fightroom', ['team' => $team, 'roomId' => 5, 'pokemons' => $pokemons]);
+        return view('fight.fightroom', ['team' => $team, 'roomId' => mt_rand(10000000,99999999), 'pokemons' => $pokemons]);
     }
 
     public function joinRoom(Request $request, Team $team)

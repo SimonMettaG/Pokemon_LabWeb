@@ -90,7 +90,7 @@ class TeamController extends Controller
                 'image' => $info->sprites->front_default
             ],);
         }
-       
+       /*
 
         $pokemons = app('App\\Http\Controllers\PokeapiController')->pokeapiAll();
 
@@ -103,7 +103,10 @@ class TeamController extends Controller
             array_push($members_info, $info);
             
         }
-        return view('team_creation.edit', ['team' => $team, 'team_members' => $team_members, 'pokemons' => $pokemons, 'members_info' => $members_info]);
+        */
+        //return view('team_creation.edit', ['team' => $team, 'team_members' => $team_members, 'pokemons' => $pokemons, 'members_info' => $members_info]);
+        $teams = auth()->user()->teams()->paginate();
+        return view('team_creation.index', ['teams' => $teams,]);
     }
 
     /**

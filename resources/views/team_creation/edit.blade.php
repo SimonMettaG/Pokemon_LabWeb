@@ -68,26 +68,38 @@
                     </td>
                     <td class="col">
                         <select name="{{"move1".$i}}" id="{{"move1".$i}}" class="form-control">
+                            <option value="{{ $team_members[$i]->move1 }}">{{ $team_members[$i]->move1 }}</option>
                             @foreach ($members_info[$i]->moves as $move)
-                                <option value="{{ $move->move->name }}">{{ $move->move->name }}</option>
+                                @if($move != $team_members[$i]->move1)
+                                    <option value="{{ $move->move->name }}">{{ $move->move->name }}</option>
+                                @endif
                             @endforeach</select>
                     </td>
                     <td class="col">
                         <select name="{{"move2".$i}}" id="{{"move2".$i}}" class="form-control">
+                            <option value="{{ $team_members[$i]->move2 }}">{{ $team_members[$i]->move2 }}</option>
                             @foreach ($members_info[$i]->moves as $move)
-                                <option value="{{ $move->move->name }}">{{ $move->move->name }}</option>
+                                @if($move != $team_members[$i]->move2)
+                                    <option value="{{ $move->move->name }}">{{ $move->move->name }}</option>
+                                @endif
                             @endforeach</select>
                     </td>
                     <td class="col">
                         <select name="{{"move3".$i}}" id="{{"move3".$i}}" class="form-control">
+                            <option value="{{ $team_members[$i]->move3 }}">{{ $team_members[$i]->move3 }}</option>
                             @foreach ($members_info[$i]->moves as $move)
-                                <option value="{{ $move->move->name }}">{{ $move->move->name }}</option>
+                                @if($move != $team_members[$i]->move3)
+                                    <option value="{{ $move->move->name }}">{{ $move->move->name }}</option>
+                                @endif
                             @endforeach</select>
                     </td>
                     <td class="col">
                         <select name="{{"move4".$i}}" id="{{"move4".$i}}" class="form-control">
+                            <option value="{{ $team_members[$i]->move4 }}">{{ $team_members[$i]->move4 }}</option>
                             @foreach ($members_info[$i]->moves as $move)
-                                <option value="{{ $move->move->name }}">{{ $move->move->name }}</option>
+                                @if($move != $team_members[$i]->move4)
+                                    <option value="{{ $move->move->name }}">{{ $move->move->name }}</option>
+                                @endif
                             @endforeach</select>
                     </td>
                     <td class="col">

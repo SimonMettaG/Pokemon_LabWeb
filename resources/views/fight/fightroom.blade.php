@@ -6,6 +6,7 @@
     <div class="text-center">
     <br>
     <h1>Battle</h1>
+    <h4>Room ID: {{$roomId}}</h4>
     </div>
     <br>
     <div class="container">
@@ -68,7 +69,10 @@
                     <br>
                     <br>
                     <br>
-                    <button class="btn btn-danger">GIVE UP</button>
+                    <a class="btn btn-success">START</a>
+                    <br>
+                    <br>
+                    <a href="{{ route('teams.index') }}" class="btn btn-danger">GIVE UP</a>
                 </div>
             </div>
             <div class="col" style="border: 1px black solid;">
