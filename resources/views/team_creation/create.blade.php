@@ -18,6 +18,7 @@
                     </div>
                 </div>
                 <br>
+                <br>
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Pokemon 1: </label>
                     <div class="col-sm-10">
@@ -28,6 +29,7 @@
                         </select>
                     </div>
                 </div>
+                <br>
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Pokemon 2: </label>
                     <div class="col-sm-10">
@@ -38,6 +40,7 @@
                         </select>
                     </div>
                 </div>
+                <br>
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Pokemon 3: </label>
                     <div class="col-sm-10">
@@ -48,6 +51,7 @@
                         </select>
                     </div>
                 </div>
+                <br>
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Pokemon 4: </label>
                     <div class="col-sm-10">
@@ -58,6 +62,7 @@
                         </select>
                     </div>
                 </div>
+                <br>
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Pokemon 5: </label>
                     <div class="col-sm-10">
@@ -68,6 +73,7 @@
                         </select>
                     </div>
                 </div>
+                <br>
                 <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Pokemon 6: </label>
                     <div class="col-sm-10">
