@@ -42,7 +42,7 @@ class PokemonController extends Controller
             $type2 = $info->types[1]->type->name;
         }
         else {
-            $type2 = "null";
+            $type2 = "";
         }
 
         return [$info->moves, $type1, $type2];

@@ -22,22 +22,22 @@
                         <div class="col text-center">
                             <div class="row" style="margin-top: 5px;">
                                 <div class="container" style="text-align: center;">
-                                    <button class="btn btn-primary">{{$pokemons[0]->move1}}</button>
+                                    <button class="btn btn-primary" style="width: 100%">{{$pokemons[0]->move1}}</button>
                                 </div>
                             </div>
                             <div class="row" style="margin-top: 5px;">
                                 <div class="container" style="text-align: center;">
-                                    <button class="btn btn-primary">{{$pokemons[0]->move2}}</button>
+                                    <button class="btn btn-primary" style="width: 100%">{{$pokemons[0]->move2}}</button>
                                 </div>
                             </div>
                             <div class="row" style="margin-top: 5px;">
                                 <div class="container" style="text-align: center;">
-                                    <button class="btn btn-primary">{{$pokemons[0]->move3}}</button>
+                                    <button class="btn btn-primary" style="width: 100%">{{$pokemons[0]->move3}}</button>
                                 </div>
                             </div>
                             <div class="row" style="margin-top: 5px;">
                                 <div class="container" style="text-align: center;">
-                                    <button class="btn btn-primary">{{$pokemons[0]->move4}}</button>
+                                    <button class="btn btn-primary" style="width: 100%">{{$pokemons[0]->move4}}</button>
                                 </div>
                             </div>
                         </div>
@@ -52,9 +52,9 @@
                     <div class="row" style="margin-left: -20px; margin-right: auto;">
                         @for ($i = 1; $i < 6; $i++)
                         <div class="col col-2" style="margin-left: auto;">
-                            <button class="btn btn-white" style="backrground-color: white">
+                            <button class="btn btn-white" style="color: white; background-color: white">
                                 <img src="{{$pokemons[$i]->image}}" alt="" class="rounded" style="border: 1px black solid;" height="50px" width="50px">
-                                <p style="font-size: x-small;">{{$pokemons[$i]->name}}<br>HP [100/100]<br><br>{{$pokemons[$i]->move1}}<br>{{$pokemons[$i]->move2}}<br>{{$pokemons[$i]->move3}}<br>{{$pokemons[$i]->move4}}</p>
+                                <p style="font-size: x-small; color: black">{{$pokemons[$i]->name}}<br>HP [100/100]<br><br>{{$pokemons[$i]->move1}}<br>{{$pokemons[$i]->move2}}<br>{{$pokemons[$i]->move3}}<br>{{$pokemons[$i]->move4}}</p>
                             </button>
                         </div>
                         @endfor
@@ -81,7 +81,7 @@
                     <br>
                     <div class="row">
                         <div class="container" style="text-align: center;">
-                            <img id="{{ 'pokemonImage0'}}" src="https://static.wikia.nocookie.net/espokemon/images/b/b9/Mudkip_%282004%29.png/revision/latest?cb=20120927232012" alt="" class="rounded" style="border: 1px black solid;" height="200px" width="200px">	
+                            <img id="{{ 'pokemonImage0'}}" src="https://static.wikia.nocookie.net/espokemon/images/b/b9/Mudkip_%282004%29.png/revision/latest?cb=20120927232012" alt="" class="rounded" style="border: 1px black solid;" height="200px" width="200px">
                         </div>
                     </div>
                 </div>
@@ -94,9 +94,9 @@
                     <div class="row" style="margin-left: -50px; margin-right: auto;">
                         @for ($i = 1; $i < 6; $i++)
                         <div id="{{ 'pokemonSlot' . $i }}" class="col col-2" style="margin-left: auto;">
-                            <button class="btn btn-white">
+                            <button class="btn btn-white" style="color: white; background-color: white;">
                                 <img id="{{ 'pokemonImage' . $i }}" src="https://static.wikia.nocookie.net/espokemon/images/b/b9/Mudkip_%282004%29.png/revision/latest?cb=20120927232012" alt="" class="rounded" style="border: 1px black solid;" height="50px" width="50px">
-                                <p id="{{ 'pokemonName' . $i }}" style="font-size: x-small;">Pokemon {{$i}}<br>HP [100/100]
+                                <p id="{{ 'pokemonName' . $i }}" style="font-size: x-small; color: black">Pokemon {{$i}}<br>HP [100/100]
                             </button>
                         </div>
                         @endfor
@@ -110,7 +110,7 @@
     <br>
     <div class="container">
         <div class="form-group">
-            <textarea class="form-control" id="" rows="5" style="font-size: x-small;"></textarea>
+            <textarea class="form-control" id="" rows="5" style="font-size: x-small; resize: none" readonly></textarea>
         </div>
     </div>
     <br><br>
@@ -153,7 +153,7 @@
         .listen('MessageSent', function(data) {
             //console.log(data);
         });
-    
+
     Echo.join("join."+roomId)
         .here((users) => {
             //console.log(users)
@@ -201,7 +201,7 @@
         .error((error) => {
             console.error(error);
         });
-    
+
     Echo.private("receive."+roomId)
         .listen('ReceivePokemon', function(data) {
             var i = 1;

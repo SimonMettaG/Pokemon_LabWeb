@@ -31,8 +31,8 @@
     <table class="table">
         <thead>
             <tr>
-                <th class="col">Pokemon Name</th>
-                <th class="col">New Pokemon Name</th>
+                <th class="col">Pokemon</th>
+                <th class="col">New Pokemon</th>
                 <th class="col">Type 1</th>
                 <th class="col">Type 2</th>
                 <th class="col">Move 1</th>
@@ -60,10 +60,8 @@
                     </td class="col">
                     <td name="type1" id="{{"type1".$i}}" class="col">{{ $members_info[$i]->types[0]->type->name}}</td>
                     <td name="type2" id="{{"type2".$i}}" class="col">
-                        @if (count($members_info[$i]->types)>1)
-                        {{$members_info[$i]->types[1]->type->name}}
-                        @else
-                        null
+                        @if (count($members_info[$i]->types) > 1)
+                            {{$members_info[$i]->types[1]->type->name}}
                         @endif
                     </td>
                     <td class="col">

@@ -10,31 +10,124 @@
 </div>
 <br>
 <div class="container">
-    <table class="table">
-        <thead>
-            <tr>
-                <th class="col">Pokemon 1</th>
-                <th class="col">Type1</th>
-                <th class="col">Type2</th>
-                <th class="col">Move1</th>
-                <th class="col">Move2</th>
-                <th class="col">Move3</th>
-                <th class="col">Move4</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($pokemons as $pokemon)
-            <tr>
-                <td class="col">{{$pokemon->name}}</td>
-                <td class="col">{{$pokemon->type1}}</td>
-                <td class="col">{{$pokemon->type2}}</td>
-                <td class="col">{{$pokemon->move1}}</td>
-                <td class="col">{{$pokemon->move2}}</td>
-                <td class="col">{{$pokemon->move3}}</td>
-                <td class="col">{{$pokemon->move4}}</td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+    <div class="row">
+        @for ($i = 0; $i < 3; $i++)
+            <div class="col">
+                <div class="containers" style="border: 3px black solid; border-radius: 5px">
+                    <div class="row">
+                        <div class="col-5">
+                            <img src="{{ $pokemons[$i]->image}}" alt="" width="150px" height="150px" style="border: 2px black solid; border-radius: 5px">
+                        </div>
+                        <div class="col-7">
+                            <div class="container" style="text-align: center">
+                                <h4>{{ $pokemons[$i]->name }}</h4>
+                            </div>
+                            <div class="row" style="margin-left: -50px">
+                                <div class="col">
+                                    <div class="contaner" style="text-align: center">
+                                        {{ $pokemons[$i]->move1 }}
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="contaner" style="text-align: center">
+                                        {{ $pokemons[$i]->move2 }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-left: -50px">
+                                <div class="col">
+                                    <div class="contaner" style="text-align: center">
+                                        {{ $pokemons[$i]->move3 }}
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="contaner" style="text-align: center">
+                                        {{ $pokemons[$i]->move4 }}
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row" style="margin-left: -50px">
+                                <div class="col">
+                                    <div class="contaner" style="text-align: center;" >
+                                        <p style="border: 1px black solid; border-radius: 10px; display: inline-block; background-color: cornsilk">&nbsp{{ $pokemons[$i]->type1 }}&nbsp</p>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    @if ($pokemons[$i]->type2 != 'null')
+                                    <div class="contaner" style="text-align: center;" >
+                                        <p style="border: 1px black solid; border-radius: 10px; display: inline-block; background-color: cornsilk">&nbsp{{ $pokemons[$i]->type2 }}&nbsp</p>
+                                    </div>
+                                    @else
+                                    <div class="contaner" style="text-align: center;" ></div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endfor
+    </div>
+    <br>
+    <div class="row">
+        @for ($i = 3; $i < 6; $i++)
+            <div class="col">
+                <div class="containers" style="border: 3px black solid; border-radius: 5px">
+                    <div class="row">
+                        <div class="col-5">
+                            <img src="{{ $pokemons[$i]->image}}" alt="" width="150px" height="150px" style="border: 2px black solid; border-radius: 5px">
+                        </div>
+                        <div class="col-7">
+                            <div class="container" style="text-align: center">
+                                <h4>{{ $pokemons[$i]->name }}</h4>
+                            </div>
+                            <div class="row" style="margin-left: -50px">
+                                <div class="col">
+                                    <div class="contaner" style="text-align: center">
+                                        {{ $pokemons[$i]->move1 }}
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="contaner" style="text-align: center">
+                                        {{ $pokemons[$i]->move2 }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-left: -50px">
+                                <div class="col">
+                                    <div class="contaner" style="text-align: center">
+                                        {{ $pokemons[$i]->move3 }}
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="contaner" style="text-align: center">
+                                        {{ $pokemons[$i]->move4 }}
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row" style="margin-left: -50px">
+                                <div class="col">
+                                    <div class="contaner" style="text-align: center;" >
+                                        <p style="border: 1px black solid; border-radius: 10px; display: inline-block; background-color: cornsilk">&nbsp{{ $pokemons[$i]->type1 }}&nbsp</p>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    @if ($pokemons[$i]->type2 != 'null')
+                                    <div class="contaner" style="text-align: center;" >
+                                        <p style="border: 1px black solid; border-radius: 10px; display: inline-block; background-color: cornsilk">&nbsp{{ $pokemons[$i]->type2 }}&nbsp</p>
+                                    </div>
+                                    @else
+                                    <div class="contaner" style="text-align: center;" ></div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endfor
+    </div>
 </div>
 @endsection
