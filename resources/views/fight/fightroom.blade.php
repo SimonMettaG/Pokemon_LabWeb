@@ -81,7 +81,7 @@
                     <br>
                     <div class="row">
                         <div class="container" style="text-align: center;">
-                            <img id="{{ 'pokemonImage0'}}" src="https://static.wikia.nocookie.net/espokemon/images/b/b9/Mudkip_%282004%29.png/revision/latest?cb=20120927232012" alt="" class="rounded" style="border: 1px black solid;" height="200px" width="200px">
+                            <img id="{{ 'pokemonImage0'}}" src="https://static.wikia.nocookie.net/espokemon/images/b/b9/Mudkip_%282004%29.png/revision/latest?cb=20120927232012" alt="" class="rounded" style="border: 1px black solid; background-color: white" height="200px" width="200px">
                         </div>
                     </div>
                 </div>
