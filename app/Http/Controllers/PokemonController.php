@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Pokemon;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class PokemonController extends Controller
 {
@@ -12,15 +13,15 @@ class PokemonController extends Controller
     {
         $arr = $request->input();
         $pokemon->name = $arr['pokemon'.$id];
-        $info = app('App\\Http\Controllers\PokeapiController')->pokeapi($pokemon->name);
-        $type1 = $info->types[0]->type->name;
+        $info = app('App\\Http\Controllers\PokeapiController')->pokeapi(Str::lower($pokemon->name));
+        $type1 = Str::title($info->types[0]->type->name);
         if (count($info->types)>1) {
-            $type2 = $info->types[1]->type->name;
+            $type2 = Str::title($info->types[1]->type->name);
         }
         else {
             $type2 = "null";
         }
-        $pokemon->type1 =  $type1;
+        $pokemon->type1 = $type1;
         $pokemon->type2 = $type2;
         $pokemon->move1 = $arr['move1'.$id];
         $pokemon->move2 = $arr['move2'.$id];
@@ -35,16 +36,21 @@ class PokemonController extends Controller
     {
         $arr = $request->input();
         $pokemon = $arr['pokemon'];
-        $info = app('App\\Http\Controllers\PokeapiController')->pokeapi($pokemon);
+        $info = app('App\\Http\Controllers\PokeapiController')->pokeapi(Str::lower($pokemon));
+        $moves = $info->moves;
 
-        $type1 = $info->types[0]->type->name;
+        foreach ($moves as $move){
+            $move->move->name = Str::title($move->move->name);
+        }
+
+        $type1 = Str::title($info->types[0]->type->name);
         if (count($info->types)>1) {
-            $type2 = $info->types[1]->type->name;
+            $type2 = Str::title($info->types[1]->type->name);
         }
         else {
             $type2 = "";
         }
 
-        return [$info->moves, $type1, $type2];
+        return [$moves, $type1, $type2];
     }
 }

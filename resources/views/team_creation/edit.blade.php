@@ -31,8 +31,8 @@
     <table class="table">
         <thead>
             <tr>
-                <th class="col">Pokemon</th>
-                <th class="col">New Pokemon</th>
+                <th class="col">Pokémon</th>
+                <th class="col">New Pokémon</th>
                 <th class="col">Type 1</th>
                 <th class="col">Type 2</th>
                 <th class="col">Move 1</th>
@@ -47,21 +47,21 @@
             <tr>
                 <form action="{{ route('pokemon.update', ['pokemon' => $team_members[$i]->id, 'id' => $i]) }}" method="POST" class="form-inline">
                     @csrf
-                    <td class="col">{{$members_info[$i]->name}}</td>
+                    <td class="col">{{Str::title($members_info[$i]->name)}}</td>
                     <td class="col">
                         <select name="{{"pokemon".$i}}" id="{{"pokemon".$i}}" class="form-control" onChange="changeMoves({{$i}})">
-                            <option value="{{$members_info[$i]->name}}">{{$members_info[$i]->name}}</option>
+                            <option value="{{Str::title($members_info[$i]->name)}}">{{Str::title($members_info[$i]->name)}}</option>
                             @foreach ($pokemons as $pokemon)
-                            @if($pokemon != $members_info[$i]->name)
-                                <option value="{{ $pokemon }}">{{ $pokemon }}</option>
-                            @endif
+                                @if($pokemon != $members_info[$i]->name)
+                                    <option value="{{ Str::title($pokemon) }}">{{ Str::title($pokemon) }}</option>
+                                @endif
                             @endforeach
                         </select>
                     </td class="col">
-                    <td name="type1" id="{{"type1".$i}}" class="col">{{ $members_info[$i]->types[0]->type->name}}</td>
+                    <td name="type1" id="{{"type1".$i}}" class="col">{{ Str::title($members_info[$i]->types[0]->type->name)}}</td>
                     <td name="type2" id="{{"type2".$i}}" class="col">
                         @if (count($members_info[$i]->types) > 1)
-                            {{$members_info[$i]->types[1]->type->name}}
+                            {{ Str::title($members_info[$i]->types[1]->type->name) }}
                         @endif
                     </td>
                     <td class="col">
@@ -69,7 +69,7 @@
                             <option value="{{ $team_members[$i]->move1 }}">{{ $team_members[$i]->move1 }}</option>
                             @foreach ($members_info[$i]->moves as $move)
                                 @if($move != $team_members[$i]->move1)
-                                    <option value="{{ $move->move->name }}">{{ $move->move->name }}</option>
+                                    <option value="{{ Str::title($move->move->name) }}">{{ Str::title($move->move->name) }}</option>
                                 @endif
                             @endforeach</select>
                     </td>
@@ -77,8 +77,8 @@
                         <select name="{{"move2".$i}}" id="{{"move2".$i}}" class="form-control">
                             <option value="{{ $team_members[$i]->move2 }}">{{ $team_members[$i]->move2 }}</option>
                             @foreach ($members_info[$i]->moves as $move)
-                                @if($move != $team_members[$i]->move2)
-                                    <option value="{{ $move->move->name }}">{{ $move->move->name }}</option>
+                                @if(Str::title($move->move->name) != $team_members[$i]->move2)
+                                    <option value="{{ Str::title($move->move->name) }}">{{ Str::title($move->move->name) }}</option>
                                 @endif
                             @endforeach</select>
                     </td>
@@ -86,8 +86,8 @@
                         <select name="{{"move3".$i}}" id="{{"move3".$i}}" class="form-control">
                             <option value="{{ $team_members[$i]->move3 }}">{{ $team_members[$i]->move3 }}</option>
                             @foreach ($members_info[$i]->moves as $move)
-                                @if($move != $team_members[$i]->move3)
-                                    <option value="{{ $move->move->name }}">{{ $move->move->name }}</option>
+                                @if(Str::title($move->move->name) != $team_members[$i]->move3)
+                                    <option value="{{ Str::title($move->move->name) }}">{{ Str::title($move->move->name) }}</option>
                                 @endif
                             @endforeach</select>
                     </td>
@@ -95,14 +95,14 @@
                         <select name="{{"move4".$i}}" id="{{"move4".$i}}" class="form-control">
                             <option value="{{ $team_members[$i]->move4 }}">{{ $team_members[$i]->move4 }}</option>
                             @foreach ($members_info[$i]->moves as $move)
-                                @if($move != $team_members[$i]->move4)
-                                    <option value="{{ $move->move->name }}">{{ $move->move->name }}</option>
+                                @if(Str::title($move->move->name) != $team_members[$i]->move4)
+                                    <option value="{{ Str::title($move->move->name) }}">{{ Str::title($move->move->name) }}</option>
                                 @endif
                             @endforeach</select>
                     </td>
                     <td class="col">
                         <div>
-                            <input type="submit" value="Save Pokemon" class="btn btn-success">
+                            <input type="submit" value="Save Pokémon" class="btn btn-success">
                         </div>
                     </td>
                 </form>

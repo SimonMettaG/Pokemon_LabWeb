@@ -9,6 +9,7 @@ use App\Models\Pokemon;
 use App\Http\Controllers\PokeapiController;
 use Illuminate\Support\Facades\Auth;
 use PokePHP\PokeApi;
+use Illuminate\Support\Str;
 
 class TeamController extends Controller
 {
@@ -32,7 +33,7 @@ class TeamController extends Controller
     {
         $pokemons = app('App\\Http\Controllers\PokeapiController')->pokeapiAll();
        
-        return view('team_creation.create', ["pokemons" => $pokemons,]);
+        return view('team_creation.create', ["pokemons" => $pokemons]);
     }
 
     /**
@@ -46,7 +47,7 @@ class TeamController extends Controller
         $arr = $request->input();
         $team= new Team();
         if($arr["name"] == null) {
-            $arr["name"] = "";
+            $arr["name"] = "DEFAULT";
         }
         
         $userid = Auth::id();
@@ -63,17 +64,17 @@ class TeamController extends Controller
         $pokemon5 = $arr["pokemon5"];
         $pokemon6 = $arr["pokemon6"];
 
-        array_push($pokemonArray,$pokemon1);
-        array_push($pokemonArray,$pokemon2);
-        array_push($pokemonArray,$pokemon3);
-        array_push($pokemonArray,$pokemon4);
-        array_push($pokemonArray,$pokemon5);
-        array_push($pokemonArray,$pokemon6);
+        array_push($pokemonArray, $pokemon1);
+        array_push($pokemonArray, $pokemon2);
+        array_push($pokemonArray, $pokemon3);
+        array_push($pokemonArray, $pokemon4);
+        array_push($pokemonArray, $pokemon5);
+        array_push($pokemonArray, $pokemon6);
         
         foreach ($pokemonArray as $pokemon) {
-            $info = app('App\\Http\Controllers\PokeapiController')->pokeapi($pokemon);
+            $info = app('App\\Http\Controllers\PokeapiController')->pokeapi(Str::lower($pokemon));
             if (count($info->types)>1) {
-                $type2 = $info->types[1]->type->name;
+                $type2 = Str::title($info->types[1]->type->name);
             }
             else {
                 $type2 = "null";
@@ -81,12 +82,12 @@ class TeamController extends Controller
             $team->pokemons()->create([
             
                 'name' => $pokemon,
-                'type1' => $info->types[0]->type->name,
+                'type1' => Str::title($info->types[0]->type->name),
                 'type2' => $type2,
-                'move1' => $info->moves[0]->move->name,
-                'move2' => $info->moves[1]->move->name,
-                'move3' => $info->moves[2]->move->name,
-                'move4' => $info->moves[3]->move->name,
+                'move1' => Str::title($info->moves[0]->move->name),
+                'move2' => Str::title($info->moves[1]->move->name),
+                'move3' => Str::title($info->moves[2]->move->name),
+                'move4' => Str::title($info->moves[3]->move->name),
                 'image' => $info->sprites->front_default
             ],);
         }
@@ -133,7 +134,7 @@ class TeamController extends Controller
         $team_members = Pokemon::where("team_id", $team->id)->get();
         $members_info = array();
         foreach ($team_members as $member) {
-            $info = app('App\\Http\Controllers\PokeapiController')->pokeapi($member->name);
+            $info = app('App\\Http\Controllers\PokeapiController')->pokeapi(Str::lower($member->name));
             array_push($members_info, $info);
             
         }

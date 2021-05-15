@@ -47,7 +47,7 @@
                 <div class="container" style="text-align: center;">
                     <h4>{{$pokemons[0]->name}}: HP[69/420]</h4>
                 </div>
-                <h4>Pokemon:</h4>
+                <h4>Pokémon:</h4>
                 <div class="container" style="text-align: center;">
                     <div class="row" style="margin-left: -20px; margin-right: auto;">
                         @for ($i = 1; $i < 6; $i++)
@@ -87,16 +87,16 @@
                 </div>
                 <br>
                 <div class="container" style="text-align: center;">
-                    <h4 id="{{ 'pokemonName0'}}">[pokemon]: HP[69/420]</h4>
+                    <h4 id="{{ 'pokemonName0'}}">[Pokémon]: HP[69/420]</h4>
                 </div>
-                <h4>Pokemon:</h4>
+                <h4>Pokémon:</h4>
                 <div class="container" style="text-align: center;">
                     <div class="row" style="margin-left: -50px; margin-right: auto;">
                         @for ($i = 1; $i < 6; $i++)
                         <div id="{{ 'pokemonSlot' . $i }}" class="col col-2" style="margin-left: auto;">
                             <button class="btn btn-white" style="color: white; background-color: white;">
                                 <img id="{{ 'pokemonImage' . $i }}" src="https://static.wikia.nocookie.net/espokemon/images/b/b9/Mudkip_%282004%29.png/revision/latest?cb=20120927232012" alt="" class="rounded" style="border: 1px black solid;" height="50px" width="50px">
-                                <p id="{{ 'pokemonName' . $i }}" style="font-size: x-small; color: black">Pokemon {{$i}}<br>HP [100/100]
+                                <p id="{{ 'pokemonName' . $i }}" style="font-size: x-small; color: black">Pokémon {{$i}}<br>HP [100/100]
                             </button>
                         </div>
                         @endfor
