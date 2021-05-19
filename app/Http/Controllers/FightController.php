@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Team;
+use App\Models\Pokemon;
 use App\Models\Message;
 use App\Events\MessageSent;
 use App\Events\JoinedRoom;
 use App\Events\ReceivePokemon;
+use App\Events\PokemonSwap;
 
 
 class FightController extends Controller
@@ -64,5 +66,18 @@ class FightController extends Controller
         broadcast(new MessageSent($user, $message, $request->input('roomId')));
 
         return ['status' => 'Message Sent!'];
+    }
+
+    public function changePokemon(Request $request)
+    {
+
+        $user = auth()->user();
+        $res = $request->input();
+        $mainPokemon = Pokemon::find($res['mainPokemonID']);
+        $benchPokemon = Pokemon::find($res['benchPokemonID']);
+        //broadcast(new PokemonSwap($user, $res['mainPokemonID'], $res['benchPokemonID'], $res['position'], $request->input('roomId')))->toOthers();
+        broadcast(new PokemonSwap($user, $mainPokemon, $benchPokemon, $res['position'], $request->input('roomId')))->toOthers();
+        
+        return [$res];
     }
 }

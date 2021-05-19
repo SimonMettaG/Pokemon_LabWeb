@@ -77,7 +77,7 @@ class TeamController extends Controller
                 $type2 = Str::title($info->types[1]->type->name);
             }
             else {
-                $type2 = "null";
+                $type2 = "Null";
             }
             $team->pokemons()->create([
             

@@ -69,6 +69,8 @@ Route::post('fightMessage', 'FightController@sendMessage')->name('fight.postFigh
 
 Route::post('fightReceive', 'FightController@receive')->name('fight.receive');
 
+Route::post('fightChangePokemon', 'FightController@changePokemon')->name('fight.changePokemon');
+
 Route::get('register', 'AuthController@register')->name('auth.register');
 Route::post('register', 'AuthController@doRegister')
     ->name('auth.do-register');
