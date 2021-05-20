@@ -79,10 +79,12 @@
                     <br>
                     <br>
                     <br>
-                    <a class="btn btn-success">START</a>
-                    <br>
-                    <br>
-                    <a href="{{ route('teams.index') }}" class="btn btn-danger">GIVE UP</a>
+                    <div id="centralButtons">
+                        <div class="alert alert-info">
+                            <p>Waiting for opponent...</p>
+                        </div>
+                        <a href="{{ route('teams.index') }}" class="btn btn-danger">EXIT ROOM</a>
+                    </div>
                 </div>
             </div>
             <div class="col" style="border: 1px black solid;">
@@ -155,7 +157,9 @@
 <script>
     var roomId = {!! json_encode($roomId) !!};
     var team = {!! json_encode($team) !!};
-    //console.log(team);
+
+    let turn = 0;
+    
     function sendMessage(roomId) {
         let theDescription = $('#message').val();
         $.ajax({
@@ -213,11 +217,38 @@
             });
         })
         .leaving((user) => {
-            //console.log(user.id);
+            console.log(user.name);
+            let theURL='{{ route('fight.endFight')}}';
+            $.ajax({
+                url: theURL,
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    state: 1
+                }
+            })
+            .done(function(response) {
+                alert("Player left: "+user.name);
+                console.log(response);
+
+                if(response.success){
+                    $('#centralButtons').html('<div class="alert alert-success"><p>'+response.success
+                    +'</p></div><a href="{{ route('teams.index') }}" class="btn btn-danger">EXIT ROOM</a>');
+                }
+                else{
+                    $('#centralButtons').html('<a href="{{ route('teams.index') }}" class="btn btn-danger">Prueba</a>');
+                }
+            })
+            .fail(function(jqXHR, response) {
+                console.log('Fallido', response);
+            });
         })
         .listen('JoinedRoom', function(data) {
             var i = 1;
-            //console.log(data);
+            //console.log("Soy anfitrion");
             //console.log(data.pokemons);
             var pokemonArray = data.pokemons.data;
             $('#teamName').html('Team: '+data.team.name);
@@ -227,6 +258,8 @@
             $('#mainM2Alt').html(pokemonArray[0].move2);
             $('#mainM3Alt').html(pokemonArray[0].move3);
             $('#mainM4Alt').html(pokemonArray[0].move4);
+
+            $('#centralButtons').html('<a class="btn btn-success" onclick="startFight()">START</a><br><br><a href="{{ route('teams.index') }}" class="btn btn-danger">GIVE UP</a><br>');
 
             for(i; i<6; i++){
                 $('#pokemonImage'+i).attr('src', pokemonArray[i].image);
@@ -243,7 +276,7 @@
     Echo.private("receive."+roomId)
         .listen('ReceivePokemon', function(data) {
             var i = 1;
-            //console.log(data);
+            //console.log("Soy guest");
             //console.log(data.pokemons);
             var pokemonArray = data.pokemons.data;
             $('#teamName').html('Team: '+data.team.name);
@@ -253,6 +286,8 @@
             $('#mainM2Alt').html(pokemonArray[0].move2);
             $('#mainM3Alt').html(pokemonArray[0].move3);
             $('#mainM4Alt').html(pokemonArray[0].move4);
+
+            $('#centralButtons').html('<div class="alert alert-success"><p>Waiting for host to start fight</p></div><a href="{{ route('teams.index') }}" class="btn btn-danger">GIVE UP</a><br>');
 
             for(i; i<6; i++){
                 $('#pokemonImage'+i).attr('src', pokemonArray[i].image);
@@ -269,7 +304,7 @@
 
             let mainHP = $('#benchHPAlt'+i).attr('value');
             let benchHP = $('#mainHPAlt').attr('value');
-            
+
             $('#teamName').html('Team: '+data.mainPokemonID.name);
             $('#pokemonImage0').attr('src', data.mainPokemonID.image);
             $('#pokemonName0').html(data.mainPokemonID.name+': HP <label id="mainHPAlt" value="'+mainHP+'">'+mainHP+'</label>');
@@ -278,65 +313,100 @@
             $('#mainM2Alt').html(data.mainPokemonID.move2);
             $('#mainM3Alt').html(data.mainPokemonID.move3);
             $('#mainM4Alt').html(data.mainPokemonID.move4);
-            
+
             $('#pokemonImage'+i).attr('src', data.benchPokemonID.image);
             $('#pokemonName'+i).html(
                 data.benchPokemonID.name+'<br><br>HP<br><br><label id="benchHPAlt'+i+'" value="'+benchHP+'">'+benchHP+'</label><br><br>'
                 + data.benchPokemonID.move1+'<br><br>'+ data.benchPokemonID.move2+'<br><br>'+ data.benchPokemonID.move3+'<br><br>'+ data.benchPokemonID.move4
             );
+            
         }
     );
+
+    Echo.private("start."+roomId)
+        .listen('StartFight', function(data) {
+            $('#centralButtons').html('<div class="alert alert-success"><p>Choose your first pokemon</p></div><a href="{{ route('teams.index') }}" class="btn btn-danger">GIVE UP</a><br>');
+            turn=1;
+            
+        }
+    );
+
+    function startFight(){
+        $.ajax({
+            url: '{{ route('fight.startFight') }}',
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            data: {
+                roomId: roomId,
+            }
+        })
+        .done(function(response) {
+            
+            console.log(response);
+
+            $('#centralButtons').html('<div class="alert alert-success"><p>Choose your first pokemon</p></div><a href="{{ route('teams.index') }}" class="btn btn-danger">GIVE UP</a><br>');
+            turn=1;
+        })
+        .fail(function(jqXHR, response) {
+            console.log('Fallido', response);
+        });
+    }
     
     function swapPokemon(id, dbID) {
-      
-      let mainPokemonImage = $('#mainImage').attr('src');
-      let mainPokemonM1 = $('#mainM1').val();
-      let mainPokemonM2 = $('#mainM2').val();
-      let mainPokemonM3 = $('#mainM3').val();
-      let mainPokemonM4 = $('#mainM4').val();
-      let mainPokemonName = $('#mainName').attr('value');
-      let mainPokemonHP = $('#mainHP').attr('value');
-      let mainPokemonID = $('#mainImage').attr('value');
-      
-      let benchPokemonImage = $( '#benchImage' + id).attr('src');
-      let benchPokemonHP = $( '#benchHP' + id).text();
-      let benchPokemonName = $( '#benchName' + id).text();
-      let benchPokemonMove1 = $( '#benchMove1' + id).text();
-      let benchPokemonMove2 = $( '#benchMove2' + id).text();
-      let benchPokemonMove3 = $( '#benchMove3' + id).text();
-      let benchPokemonMove4 = $( '#benchMove4' + id).text();
-    
-      $('#mainImage').attr('src', benchPokemonImage);
-      $('#mainM1').html(benchPokemonMove1);
-      $('#mainM1').val(benchPokemonMove1);
-      $('#mainM2').html(benchPokemonMove2);
-      $('#mainM2').val(benchPokemonMove2);
-      $('#mainM3').html(benchPokemonMove3);
-      $('#mainM3').val(benchPokemonMove3);
-      $('#mainM4').html(benchPokemonMove4);
-      $('#mainM4').val(benchPokemonMove4);
-      $('#mainName').attr('value', benchPokemonName);
-      $('#mainName').html(benchPokemonName);
-      $('#mainHP').attr('value', benchPokemonHP);
-      $('#mainHP').html(benchPokemonHP);
-      $('#mainImage').attr('value', dbID);
+      if(turn){
+        turn=0;
 
-      $('#benchImage'+ id).attr('src', mainPokemonImage);
-      $('#benchMove1'+ id).html(mainPokemonM1);
-      $('#benchMove1'+ id).val(mainPokemonM1);
-      $('#benchMove2'+ id).html(mainPokemonM2);
-      $('#benchMove2'+ id).val(mainPokemonM2);
-      $('#benchMove3'+ id).html(mainPokemonM3);
-      $('#benchMove3'+ id).val(mainPokemonM3);
-      $('#benchMove4'+ id).html(mainPokemonM4);
-      $('#benchMove4'+ id).val(mainPokemonM4);
-      $('#benchName'+ id).attr('value', mainPokemonName);
-      $('#benchName'+ id).html(mainPokemonName);
-      $('#benchHP'+ id).attr('value', mainPokemonHP);
-      $('#benchHP'+ id).html(mainPokemonHP);
-      $('#swapButton'+id).attr('onclick', "swapPokemon("+id+","+mainPokemonID+")");
-    
-      $.ajax({
+        let mainPokemonImage = $('#mainImage').attr('src');
+        let mainPokemonM1 = $('#mainM1').val();
+        let mainPokemonM2 = $('#mainM2').val();
+        let mainPokemonM3 = $('#mainM3').val();
+        let mainPokemonM4 = $('#mainM4').val();
+        let mainPokemonName = $('#mainName').attr('value');
+        let mainPokemonHP = $('#mainHP').attr('value');
+        let mainPokemonID = $('#mainImage').attr('value');
+        
+        let benchPokemonImage = $( '#benchImage' + id).attr('src');
+        let benchPokemonHP = $( '#benchHP' + id).text();
+        let benchPokemonName = $( '#benchName' + id).text();
+        let benchPokemonMove1 = $( '#benchMove1' + id).text();
+        let benchPokemonMove2 = $( '#benchMove2' + id).text();
+        let benchPokemonMove3 = $( '#benchMove3' + id).text();
+        let benchPokemonMove4 = $( '#benchMove4' + id).text();
+        
+        $('#mainImage').attr('src', benchPokemonImage);
+        $('#mainM1').html(benchPokemonMove1);
+        $('#mainM1').val(benchPokemonMove1);
+        $('#mainM2').html(benchPokemonMove2);
+        $('#mainM2').val(benchPokemonMove2);
+        $('#mainM3').html(benchPokemonMove3);
+        $('#mainM3').val(benchPokemonMove3);
+        $('#mainM4').html(benchPokemonMove4);
+        $('#mainM4').val(benchPokemonMove4);
+        $('#mainName').attr('value', benchPokemonName);
+        $('#mainName').html(benchPokemonName);
+        $('#mainHP').attr('value', benchPokemonHP);
+        $('#mainHP').html(benchPokemonHP);
+        $('#mainImage').attr('value', dbID);
+
+        $('#benchImage'+ id).attr('src', mainPokemonImage);
+        $('#benchMove1'+ id).html(mainPokemonM1);
+        $('#benchMove1'+ id).val(mainPokemonM1);
+        $('#benchMove2'+ id).html(mainPokemonM2);
+        $('#benchMove2'+ id).val(mainPokemonM2);
+        $('#benchMove3'+ id).html(mainPokemonM3);
+        $('#benchMove3'+ id).val(mainPokemonM3);
+        $('#benchMove4'+ id).html(mainPokemonM4);
+        $('#benchMove4'+ id).val(mainPokemonM4);
+        $('#benchName'+ id).attr('value', mainPokemonName);
+        $('#benchName'+ id).html(mainPokemonName);
+        $('#benchHP'+ id).attr('value', mainPokemonHP);
+        $('#benchHP'+ id).html(mainPokemonHP);
+        $('#swapButton'+id).attr('onclick', "swapPokemon("+id+","+mainPokemonID+")");
+        
+        $.ajax({
             url: '{{ route('fight.changePokemon') }}',
             method: 'POST',
             headers: {
@@ -357,6 +427,8 @@
         .fail(function(jqXHR, response) {
             console.log('Fallido', response);
         });
+      }
+      
     }
 
 </script>

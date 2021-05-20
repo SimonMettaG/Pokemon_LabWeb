@@ -32,3 +32,7 @@ Broadcast::channel('receive.{roomId}', function ($user, $roomId) {
 Broadcast::channel('swap.{roomId}', function ($user, $roomId) {
     return Auth::check();
   });
+
+Broadcast::channel('start.{roomId}', function ($user, $roomId) {
+    return Auth::check();
+  });

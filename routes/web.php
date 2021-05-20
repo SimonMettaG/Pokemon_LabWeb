@@ -58,11 +58,17 @@ Route::post('pokemonMoves', 'PokemonController@moves')
 Route::get('fightselect/{team}', 'FightController@select')
     ->name('fight.fightselect');
 
-Route::get('fightroom/{team}', 'FightController@room')
+Route::get('fightroom/{team}/{roomID}', 'FightController@room')
     ->name('fight.fightroom');
 
 Route::get('fightjoin/{team}', 'FightController@joinRoom')
     ->name('fight.fightjoin');
+
+Route::post('fightend', 'FightController@endFight')
+    ->name('fight.endFight');
+
+Route::post('fightstart', 'FightController@startFight')
+    ->name('fight.startFight');
 
 Route::get('fightMessage', 'FightController@fetchMessages')->name('fight.fightMessage');
 Route::post('fightMessage', 'FightController@sendMessage')->name('fight.postFightMessage');

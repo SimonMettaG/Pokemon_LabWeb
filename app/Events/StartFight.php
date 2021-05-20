@@ -18,15 +18,18 @@ class StartFight implements ShouldBroadcast
 
     public $message;
 
+    public $roomId;
+
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($username)
+    public function __construct($username, $roomId)
     {
         $this->username = $username;
-        $this->message  = "{$username} liked your status";
+        $this->message  = "{$username} started fight.";
+        $this->roomId = $roomId;
     }
 
     /**
@@ -36,11 +39,6 @@ class StartFight implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return ['my-channel'];
+        return new PrivateChannel('start.'.$this->roomId);
     }
-
-    public function broadcastAs()
-  {
-      return 'start-fight';
-  }
 }

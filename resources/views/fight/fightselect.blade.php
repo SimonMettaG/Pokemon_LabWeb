@@ -8,7 +8,7 @@
             <div class="container" style="text-align: center">
                 <h4>Create a Room</h4>
                 <br>
-                <a href="{{ route('fight.fightroom', ['team' => $team]) }}" class="btn btn-success">Create room</a>
+                <a href="{{ route('fight.fightroom', ['team' => $team, 'roomID' => $roomId]) }}" class="btn btn-success">Create room</a>
             </div>
         </div>
         <div class="col-7">
