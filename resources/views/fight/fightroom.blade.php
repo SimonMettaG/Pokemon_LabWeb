@@ -56,7 +56,7 @@
                     <div class="row" style="margin-left: -20px; margin-right: auto;">
                         @for ($i = 1; $i < 6; $i++)
                         <div class="col col-2" style="margin-left: auto;">
-                            <button class="btn btn-white" style="color: white; background-color: white" onclick="swapPokemon({{$i}}, {{$pokemons[$i]->id}})">
+                            <button id="{{'swapButton'.$i}}" class="btn btn-white" style="color: white; background-color: white" onclick="swapPokemon({{$i}}, {{$pokemons[$i]->id}})">
                                 <img id="{{ 'benchImage' . $i }}" src="{{$pokemons[$i]->image}}" alt="" class="rounded" style="border: 1px black solid;" height="50px" width="50px">
                                 <p id="{{ 'benchName' . $i }}" style="font-size: x-small; color: black">{{$pokemons[$i]->name}} </p>
                                 <p style="font-size: x-small; color: black">HP </p>
@@ -89,15 +89,37 @@
                 <div class="container">
                     <div style="text-align: center;"><h2 id="teamName">Team: [enemy team]</h2></div>
                     <br>
-                    <div class="row">
-                        <div class="container" style="text-align: center;">
-                            <img id="{{ 'pokemonImage0'}}"  alt="" class="rounded" style="border: 1px black solid; background-color: white" height="200px" width="200px">
+                    <div class="row">     
+                        <div class="col">
+                            <img id="pokemonImage0" alt="" class="rounded" style="border: 1px black solid; background-color: white" height="200px" width="200px">
+                        </div>
+                        <div class="col text-center">
+                            <div class="row" style="margin-top: 5px;">
+                                <div class="container" style="text-align: center;">
+                                    <button id="mainM1Alt" value="[]" class="btn btn-primary" style="width: 100%" disabled>...</button>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 5px;">
+                                <div class="container" style="text-align: center;">
+                                    <button id="mainM2Alt" value="[]" class="btn btn-primary" style="width: 100%" disabled>...</button>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 5px;">
+                                <div class="container" style="text-align: center;">
+                                    <button id="mainM3Alt" value="[]" class="btn btn-primary" style="width: 100%" disabled>...</button>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 5px;">
+                                <div class="container" style="text-align: center;">
+                                    <button id="mainM4Alt" value="[]" class="btn btn-primary" style="width: 100%" disabled>...</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <br>
                 <div class="container" style="text-align: center;">
-                    <h4 id="{{ 'pokemonName0'}}">[Pokémon] : HP [69/420]</h4>
+                    <h4 id="{{ 'pokemonName0'}}">[Pokémon] : HP [?/?]</h4>
                 </div>
                 <h4>Pokémon:</h4>
                 <div class="container" style="text-align: center;">
@@ -200,11 +222,17 @@
             var pokemonArray = data.pokemons.data;
             $('#teamName').html('Team: '+data.team.name);
             $('#pokemonImage0').attr('src', pokemonArray[0].image);
-            $('#pokemonName0').html(pokemonArray[0].name+': HP[69/420]');
+            $('#pokemonName0').html(pokemonArray[0].name+': HP <label id="mainHPAlt" value="[69/420]">[69/420]</label>');
+            $('#mainM1Alt').html(pokemonArray[0].move1);
+            $('#mainM2Alt').html(pokemonArray[0].move2);
+            $('#mainM3Alt').html(pokemonArray[0].move3);
+            $('#mainM4Alt').html(pokemonArray[0].move4);
+
             for(i; i<6; i++){
                 $('#pokemonImage'+i).attr('src', pokemonArray[i].image);
                 $('#pokemonName'+i).html(
-                    pokemonArray[i].name+'<br>HP [100/100]<br><br>'+ pokemonArray[i].move1+'<br>'+ pokemonArray[i].move2+'<br>'+ pokemonArray[i].move3+'<br>'+ pokemonArray[i].move4
+                    pokemonArray[i].name+'<br><br>HP<br><br><label id="benchHPAlt'+i+'" value="[100/100]">[100/100]</label><br><br>'
+                    + pokemonArray[i].move1+'<br><br>'+ pokemonArray[i].move2+'<br><br>'+ pokemonArray[i].move3+'<br><br>'+ pokemonArray[i].move4
                 );
             }
         })
@@ -220,18 +248,42 @@
             var pokemonArray = data.pokemons.data;
             $('#teamName').html('Team: '+data.team.name);
             $('#pokemonImage0').attr('src', pokemonArray[0].image);
-            $('#pokemonName0').html(pokemonArray[0].name+': HP[69/420]');
+            $('#pokemonName0').html(pokemonArray[0].name+': HP <label id="mainHPAlt" value="[69/420]">[69/420]</label>');
+            $('#mainM1Alt').html(pokemonArray[0].move1);
+            $('#mainM2Alt').html(pokemonArray[0].move2);
+            $('#mainM3Alt').html(pokemonArray[0].move3);
+            $('#mainM4Alt').html(pokemonArray[0].move4);
+
             for(i; i<6; i++){
                 $('#pokemonImage'+i).attr('src', pokemonArray[i].image);
                 $('#pokemonName'+i).html(
-                    pokemonArray[i].name+'<br>HP [100/100]<br><br>'+ pokemonArray[i].move1+'<br>'+ pokemonArray[i].move2+'<br>'+ pokemonArray[i].move3+'<br>'+ pokemonArray[i].move4
+                    pokemonArray[i].name+'<br><br>HP<br><br><label id="benchHPAlt'+i+'" value="[100/100]">[100/100]</label><br><br>'
+                    + pokemonArray[i].move1+'<br><br>'+ pokemonArray[i].move2+'<br><br>'+ pokemonArray[i].move3+'<br><br>'+ pokemonArray[i].move4
             );
         }
     });
 
     Echo.private("swap."+roomId)
         .listen('PokemonSwap', function(data) {
-            console.log(data);
+            var i = data.position;
+
+            let mainHP = $('#benchHPAlt'+i).attr('value');
+            let benchHP = $('#mainHPAlt').attr('value');
+            
+            $('#teamName').html('Team: '+data.mainPokemonID.name);
+            $('#pokemonImage0').attr('src', data.mainPokemonID.image);
+            $('#pokemonName0').html(data.mainPokemonID.name+': HP <label id="mainHPAlt" value="'+mainHP+'">'+mainHP+'</label>');
+
+            $('#mainM1Alt').html(data.mainPokemonID.move1);
+            $('#mainM2Alt').html(data.mainPokemonID.move2);
+            $('#mainM3Alt').html(data.mainPokemonID.move3);
+            $('#mainM4Alt').html(data.mainPokemonID.move4);
+            
+            $('#pokemonImage'+i).attr('src', data.benchPokemonID.image);
+            $('#pokemonName'+i).html(
+                data.benchPokemonID.name+'<br><br>HP<br><br><label id="benchHPAlt'+i+'" value="'+benchHP+'">'+benchHP+'</label><br><br>'
+                + data.benchPokemonID.move1+'<br><br>'+ data.benchPokemonID.move2+'<br><br>'+ data.benchPokemonID.move3+'<br><br>'+ data.benchPokemonID.move4
+            );
         }
     );
     
@@ -282,6 +334,7 @@
       $('#benchName'+ id).html(mainPokemonName);
       $('#benchHP'+ id).attr('value', mainPokemonHP);
       $('#benchHP'+ id).html(mainPokemonHP);
+      $('#swapButton'+id).attr('onclick', "swapPokemon("+id+","+mainPokemonID+")");
     
       $.ajax({
             url: '{{ route('fight.changePokemon') }}',
@@ -291,8 +344,8 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             data: {
-                mainPokemonID : mainPokemonID,
-                benchPokemonID  : dbID,
+                mainPokemonID : dbID,
+                benchPokemonID  : mainPokemonID,
                 position : id,
                 roomId: roomId,
             }
