@@ -9,6 +9,7 @@ use App\Events\JoinedRoom;
 use App\Events\ReceivePokemon;
 use App\Events\PokemonSwap;
 use App\Events\StartFight;
+use App\Events\ProcessTurn;
 
 
 class FightController extends Controller
@@ -78,5 +79,11 @@ class FightController extends Controller
         $user = auth()->user();
         
         broadcast(new StartFight($user, $request->input('roomId')))->toOthers();
+    }
+
+    public function processTurn(Request $request){
+        $user = auth()->user();
+        
+        broadcast(new ProcessTurn($user, $request->input('roomId')))->toOthers();
     }
 }

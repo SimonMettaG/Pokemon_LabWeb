@@ -70,6 +70,9 @@ Route::post('fightend', 'FightController@endFight')
 Route::post('fightstart', 'FightController@startFight')
     ->name('fight.startFight');
 
+Route::post('fightprocess', 'FightController@processTurn')
+    ->name('fight.processTurn');
+
 Route::get('fightMessage', 'FightController@fetchMessages')->name('fight.fightMessage');
 Route::post('fightMessage', 'FightController@sendMessage')->name('fight.postFightMessage');
 

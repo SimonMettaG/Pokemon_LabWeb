@@ -157,11 +157,13 @@
 <script>
     var roomId = {!! json_encode($roomId) !!};
     var team = {!! json_encode($team) !!};
+    var pokemons = {!! json_encode($pokemons) !!};
 
     let turn = 0;
     let host=1;
     let currentMove={};
     let opMove={};
+    let round=0;
     
     function sendMessage(roomId) {
         let theDescription = $('#message').val();
@@ -305,13 +307,33 @@
     Echo.private("swap."+roomId)
         .listen('PokemonSwap', function(data) {
             opMove={type: "swap", data: data};
+
+            if(host){
+                $('#waiting').remove();
+                $('#continueButton').html('<div id="continueButton"><button onclick="processOpAction()" class="btn btn-primary">CONTINUE</button></div>');
+            }
         }
     );
 
     Echo.private("start."+roomId)
         .listen('StartFight', function(data) {
-            $('#centralButtons').html('<div class="alert alert-success"><p>Choose your first pokemon</p></div><a href="{{ route('teams.index') }}" class="btn btn-danger">GIVE UP</a><br>');
+            $('#centralButtons').html('<div class="alert alert-success"><p>Choose your first pokemon</p></div>'+
+            '<button id="noSwap" onclick="skipSwap()" class="btn btn-info">DON\'T SWAP</button><br><br>'+
+            '<a href="{{ route('teams.index') }}" class="btn btn-danger">GIVE UP</a><br>');
             turn=1;   
+        }
+    );
+
+    Echo.private("process."+roomId)
+        .listen('ProcessTurn', function(data) {
+            round+=1;
+            if(opMove.type=="swap"){
+                processSwap();
+            }
+            $('#centralButtons').html('<div class="alert alert-success"><p>Round '+round+'</p></div>'+
+                    '<div class="alert alert-success"><p>Make your move...</p></div>'+
+                    '<a href="{{ route('teams.index') }}" class="btn btn-danger">GIVE UP</a><br>');
+            turn = 1; 
         }
     );
 
@@ -332,7 +354,9 @@
             console.log(response);
 
             $('#centralButtons').html('<div class="alert alert-success"><p>Choose your first pokemon</p></div>'+
-            '<a onclick="processOpAction()" class="btn btn-danger">CONTINUE</a><br>'+
+            '<div id="waiting" class="alert alert-success"><p>Waiting for opponent...</p></div>'+
+            '<button id="noSwap" onclick="skipSwap()" class="btn btn-info">DON\'T SWAP</button><br><br>'+
+            '<div id="continueButton"><button onclick="processOpAction()" class="btn btn-primary" disabled>CONTINUE</button></div><br><br>'+
             '<a href="{{ route('teams.index') }}" class="btn btn-danger">GIVE UP</a><br>');
             turn=1;
         })
@@ -395,6 +419,18 @@
         currentMove={type:"swap", mainPokemonID : dbID, benchPokemonID  : mainPokemonID, position : id};
         console.log(currentMove);
 
+        if(host==0){
+            if(round==0){
+                $('#centralButtons').html('<div id="waiting" class="alert alert-success"><p>Waiting for host...</p></div>'+
+                    '<a href="{{ route('teams.index') }}" class="btn btn-danger">GIVE UP</a><br>');
+            }
+            else{
+                $('#centralButtons').html('<div id="waiting" class="alert alert-success"><p>Round '+round+'</p></div>'+
+                    '<div class="alert alert-success"><p>Waiting for host...</p></div>'+
+                    '<a href="{{ route('teams.index') }}" class="btn btn-danger">GIVE UP</a><br>');
+            }
+        }
+
         $.ajax({
             url: '{{ route('fight.changePokemon') }}',
             method: 'POST',
@@ -421,33 +457,105 @@
     }
 
     function processOpAction(){
-        if(opMove.type=="swap"){
-            processSwap();
+        if(turn==0){
+            round+=1;
+
+            $.ajax({
+                url: '{{ route('fight.processTurn') }}',
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    roomId: roomId,
+                }
+            })
+            .done(function(response) {
+                
+                $('#centralButtons').html('<div class="alert alert-success"><p>Round '+round+'</p></div>'+
+                '<div id="waiting" class="alert alert-success"><p>Waiting for opponent...</p></div>'+
+                '<div id="continueButton"><button onclick="processOpAction()" class="btn btn-primary" disabled>CONTINUE</button></div><br><br>'+
+                '<a href="{{ route('teams.index') }}" class="btn btn-danger">GIVE UP</a><br>');
+            })
+            .fail(function(jqXHR, response) {
+                console.log('Fallido', response);
+            });
+            if(opMove.type=="swap"){
+                processSwap();
+            }
+            turn = 1;
+        }
+        else{
+            console.log(turn);
+            alert("Do something before continuing")
         }
     }
 
     function processSwap(){
         let data = opMove.data;
 
-        var i = data.position;
+        if(data.position!=0){
 
-        let mainHP = $('#benchHPAlt'+i).attr('value');
-        let benchHP = $('#mainHPAlt').attr('value');
+            var i = data.position;
 
-        $('#teamName').html('Team: '+data.mainPokemonID.name);
-        $('#pokemonImage0').attr('src', data.mainPokemonID.image);
-        $('#pokemonName0').html(data.mainPokemonID.name+': HP <label id="mainHPAlt" value="'+mainHP+'">'+mainHP+'</label>');
+            let mainHP = $('#benchHPAlt'+i).attr('value');
+            let benchHP = $('#mainHPAlt').attr('value');
 
-        $('#mainM1Alt').html(data.mainPokemonID.move1);
-        $('#mainM2Alt').html(data.mainPokemonID.move2);
-        $('#mainM3Alt').html(data.mainPokemonID.move3);
-        $('#mainM4Alt').html(data.mainPokemonID.move4);
+            $('#teamName').html('Team: '+data.mainPokemonID.name);
+            $('#pokemonImage0').attr('src', data.mainPokemonID.image);
+            $('#pokemonName0').html(data.mainPokemonID.name+': HP <label id="mainHPAlt" value="'+mainHP+'">'+mainHP+'</label>');
 
-        $('#pokemonImage'+i).attr('src', data.benchPokemonID.image);
-        $('#pokemonName'+i).html(
-            data.benchPokemonID.name+'<br><br>HP<br><br><label id="benchHPAlt'+i+'" value="'+benchHP+'">'+benchHP+'</label><br><br>'
-            + data.benchPokemonID.move1+'<br><br>'+ data.benchPokemonID.move2+'<br><br>'+ data.benchPokemonID.move3+'<br><br>'+ data.benchPokemonID.move4
-        );
+            $('#mainM1Alt').html(data.mainPokemonID.move1);
+            $('#mainM2Alt').html(data.mainPokemonID.move2);
+            $('#mainM3Alt').html(data.mainPokemonID.move3);
+            $('#mainM4Alt').html(data.mainPokemonID.move4);
+
+            $('#pokemonImage'+i).attr('src', data.benchPokemonID.image);
+            $('#pokemonName'+i).html(
+                data.benchPokemonID.name+'<br><br>HP<br><br><label id="benchHPAlt'+i+'" value="'+benchHP+'">'+benchHP+'</label><br><br>'
+                + data.benchPokemonID.move1+'<br><br>'+ data.benchPokemonID.move2+'<br><br>'+ data.benchPokemonID.move3+'<br><br>'+ data.benchPokemonID.move4
+            );
+        }
+    }
+
+    function skipSwap(){
+        if(turn==1){
+            turn=0;
+
+            if(host==1){
+                $('#noSwap').remove();
+            }
+            else{
+                $('#centralButtons').html('<div class="alert alert-success"><p>Waiting for host...</p></div>'+
+                '<a href="{{ route('teams.index') }}" class="btn btn-danger">GIVE UP</a><br>');
+            }
+
+            $.ajax({
+                url: '{{ route('fight.changePokemon') }}',
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    mainPokemonID: pokemons.data[0].id,
+                    benchPokemonID : pokemons.data[0].id,
+                    position : 0,
+                    roomId: roomId
+                }
+            })
+            .done(function(response) {
+                
+                console.log(response);
+            })
+            .fail(function(jqXHR, response) {
+                console.log('Fallido', response);
+            });
+        }
+        else{
+            alert("You already swapped");
+        }
     }
 
 </script>
