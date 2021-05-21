@@ -159,6 +159,9 @@
     var team = {!! json_encode($team) !!};
 
     let turn = 0;
+    let host=1;
+    let currentMove={};
+    let opMove={};
     
     function sendMessage(roomId) {
         let theDescription = $('#message').val();
@@ -277,7 +280,8 @@
         .listen('ReceivePokemon', function(data) {
             var i = 1;
             //console.log("Soy guest");
-            //console.log(data.pokemons);
+            host=0;
+            
             var pokemonArray = data.pokemons.data;
             $('#teamName').html('Team: '+data.team.name);
             $('#pokemonImage0').attr('src', pokemonArray[0].image);
@@ -294,40 +298,20 @@
                 $('#pokemonName'+i).html(
                     pokemonArray[i].name+'<br><br>HP<br><br><label id="benchHPAlt'+i+'" value="[100/100]">[100/100]</label><br><br>'
                     + pokemonArray[i].move1+'<br><br>'+ pokemonArray[i].move2+'<br><br>'+ pokemonArray[i].move3+'<br><br>'+ pokemonArray[i].move4
-            );
-        }
+                );
+            }
     });
 
     Echo.private("swap."+roomId)
         .listen('PokemonSwap', function(data) {
-            var i = data.position;
-
-            let mainHP = $('#benchHPAlt'+i).attr('value');
-            let benchHP = $('#mainHPAlt').attr('value');
-
-            $('#teamName').html('Team: '+data.mainPokemonID.name);
-            $('#pokemonImage0').attr('src', data.mainPokemonID.image);
-            $('#pokemonName0').html(data.mainPokemonID.name+': HP <label id="mainHPAlt" value="'+mainHP+'">'+mainHP+'</label>');
-
-            $('#mainM1Alt').html(data.mainPokemonID.move1);
-            $('#mainM2Alt').html(data.mainPokemonID.move2);
-            $('#mainM3Alt').html(data.mainPokemonID.move3);
-            $('#mainM4Alt').html(data.mainPokemonID.move4);
-
-            $('#pokemonImage'+i).attr('src', data.benchPokemonID.image);
-            $('#pokemonName'+i).html(
-                data.benchPokemonID.name+'<br><br>HP<br><br><label id="benchHPAlt'+i+'" value="'+benchHP+'">'+benchHP+'</label><br><br>'
-                + data.benchPokemonID.move1+'<br><br>'+ data.benchPokemonID.move2+'<br><br>'+ data.benchPokemonID.move3+'<br><br>'+ data.benchPokemonID.move4
-            );
-            
+            opMove={type: "swap", data: data};
         }
     );
 
     Echo.private("start."+roomId)
         .listen('StartFight', function(data) {
             $('#centralButtons').html('<div class="alert alert-success"><p>Choose your first pokemon</p></div><a href="{{ route('teams.index') }}" class="btn btn-danger">GIVE UP</a><br>');
-            turn=1;
-            
+            turn=1;   
         }
     );
 
@@ -347,7 +331,9 @@
             
             console.log(response);
 
-            $('#centralButtons').html('<div class="alert alert-success"><p>Choose your first pokemon</p></div><a href="{{ route('teams.index') }}" class="btn btn-danger">GIVE UP</a><br>');
+            $('#centralButtons').html('<div class="alert alert-success"><p>Choose your first pokemon</p></div>'+
+            '<a onclick="processOpAction()" class="btn btn-danger">CONTINUE</a><br>'+
+            '<a href="{{ route('teams.index') }}" class="btn btn-danger">GIVE UP</a><br>');
             turn=1;
         })
         .fail(function(jqXHR, response) {
@@ -406,6 +392,9 @@
         $('#benchHP'+ id).html(mainPokemonHP);
         $('#swapButton'+id).attr('onclick', "swapPokemon("+id+","+mainPokemonID+")");
         
+        currentMove={type:"swap", mainPokemonID : dbID, benchPokemonID  : mainPokemonID, position : id};
+        console.log(currentMove);
+
         $.ajax({
             url: '{{ route('fight.changePokemon') }}',
             method: 'POST',
@@ -414,8 +403,8 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
             data: {
-                mainPokemonID : dbID,
-                benchPokemonID  : mainPokemonID,
+                mainPokemonID: dbID,
+                benchPokemonID : mainPokemonID,
                 position : id,
                 roomId: roomId,
             }
@@ -429,6 +418,36 @@
         });
       }
       
+    }
+
+    function processOpAction(){
+        if(opMove.type=="swap"){
+            processSwap();
+        }
+    }
+
+    function processSwap(){
+        let data = opMove.data;
+
+        var i = data.position;
+
+        let mainHP = $('#benchHPAlt'+i).attr('value');
+        let benchHP = $('#mainHPAlt').attr('value');
+
+        $('#teamName').html('Team: '+data.mainPokemonID.name);
+        $('#pokemonImage0').attr('src', data.mainPokemonID.image);
+        $('#pokemonName0').html(data.mainPokemonID.name+': HP <label id="mainHPAlt" value="'+mainHP+'">'+mainHP+'</label>');
+
+        $('#mainM1Alt').html(data.mainPokemonID.move1);
+        $('#mainM2Alt').html(data.mainPokemonID.move2);
+        $('#mainM3Alt').html(data.mainPokemonID.move3);
+        $('#mainM4Alt').html(data.mainPokemonID.move4);
+
+        $('#pokemonImage'+i).attr('src', data.benchPokemonID.image);
+        $('#pokemonName'+i).html(
+            data.benchPokemonID.name+'<br><br>HP<br><br><label id="benchHPAlt'+i+'" value="'+benchHP+'">'+benchHP+'</label><br><br>'
+            + data.benchPokemonID.move1+'<br><br>'+ data.benchPokemonID.move2+'<br><br>'+ data.benchPokemonID.move3+'<br><br>'+ data.benchPokemonID.move4
+        );
     }
 
 </script>
