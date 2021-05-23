@@ -68,7 +68,7 @@
                         <select name="{{"move1".$i}}" id="{{"move1".$i}}" class="form-control">
                             <option value="{{ $team_members[$i]->move1 }}">{{ $team_members[$i]->move1 }}</option>
                             @foreach ($members_info[$i]->moves as $move)
-                                @if($move != $team_members[$i]->move1)
+                                @if(Str::title($move->move->name) != $team_members[$i]->move1)
                                     <option value="{{ Str::title($move->move->name) }}">{{ Str::title($move->move->name) }}</option>
                                 @endif
                             @endforeach</select>

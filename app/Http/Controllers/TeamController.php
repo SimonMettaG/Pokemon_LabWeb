@@ -79,17 +79,45 @@ class TeamController extends Controller
             else {
                 $type2 = "Null";
             }
-            $team->pokemons()->create([
+            if(count($info->moves)==0){
+                $team->pokemons()->create([
             
-                'name' => $pokemon,
-                'type1' => Str::title($info->types[0]->type->name),
-                'type2' => $type2,
-                'move1' => Str::title($info->moves[0]->move->name),
-                'move2' => Str::title($info->moves[1]->move->name),
-                'move3' => Str::title($info->moves[2]->move->name),
-                'move4' => Str::title($info->moves[3]->move->name),
-                'image' => $info->sprites->front_default
-            ],);
+                    'name' => $pokemon,
+                    'type1' => Str::title($info->types[0]->type->name),
+                    'type2' => $type2,
+                    'move1' => 'No attack',
+                    'move2' => 'No attack',
+                    'move3' => 'No attack',
+                    'move4' => 'No attack',
+                    'image' => $info->sprites->front_default
+                ],);
+            }
+            else if(count($info->moves)<4){
+                $team->pokemons()->create([
+            
+                    'name' => $pokemon,
+                    'type1' => Str::title($info->types[0]->type->name),
+                    'type2' => $type2,
+                    'move1' => Str::title($info->moves[0]->move->name),
+                    'move2' => Str::title($info->moves[0]->move->name),
+                    'move3' => Str::title($info->moves[0]->move->name),
+                    'move4' => Str::title($info->moves[0]->move->name),
+                    'image' => $info->sprites->front_default
+                ],);
+            }
+            else{
+                $team->pokemons()->create([
+            
+                    'name' => $pokemon,
+                    'type1' => Str::title($info->types[0]->type->name),
+                    'type2' => $type2,
+                    'move1' => Str::title($info->moves[0]->move->name),
+                    'move2' => Str::title($info->moves[1]->move->name),
+                    'move3' => Str::title($info->moves[2]->move->name),
+                    'move4' => Str::title($info->moves[3]->move->name),
+                    'image' => $info->sprites->front_default
+                ],);
+            } 
         }
        /*
 

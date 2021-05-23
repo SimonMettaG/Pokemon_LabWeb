@@ -16,7 +16,7 @@ class PokeapiController extends Controller
 
     public function pokeapiAll(){
         $api = new PokeApi;
-        $response = $api->resourceList('pokemon', '1118', '0');
+        $response = $api->resourceList('pokemon', '807', '0');
         $poke = json_decode($response);
         $names = array();
         foreach ($poke->{'results'} as $name) {

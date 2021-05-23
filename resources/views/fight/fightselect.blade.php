@@ -47,7 +47,7 @@
                         </div>
                         <div class="col-7">
                             <div class="container" style="text-align: center">
-                                <h4>{{ $pokemons[$i]->name }}</h4>
+                                <h5>{{ $pokemons[$i]->name }}</h5>
                             </div>
                             <div class="row" style="margin-left: -50px">
                                 <div class="col">
@@ -81,7 +81,7 @@
                                     </div>
                                 </div>
                                 <div class="col">
-                                    @if ($pokemons[$i]->type2 != 'null')
+                                    @if ($pokemons[$i]->type2 != 'null' && $pokemons[$i]->type2 != 'Null')
                                     <div class="contaner" style="text-align: center;" >
                                         <p style="border: 1px black solid; border-radius: 10px; display: inline-block; background-color: cornsilk">&nbsp{{ $pokemons[$i]->type2 }}&nbsp</p>
                                     </div>
@@ -107,7 +107,7 @@
                         </div>
                         <div class="col-7">
                             <div class="container" style="text-align: center">
-                                <h4>{{ $pokemons[$i]->name }}</h4>
+                                <h5>{{ $pokemons[$i]->name }}</h5>
                             </div>
                             <div class="row" style="margin-left: -50px">
                                 <div class="col">
@@ -141,7 +141,7 @@
                                     </div>
                                 </div>
                                 <div class="col">
-                                    @if ($pokemons[$i]->type2 != 'null')
+                                    @if ($pokemons[$i]->type2 != 'null' && $pokemons[$i]->type2 != 'Null')
                                     <div class="contaner" style="text-align: center;" >
                                         <p style="border: 1px black solid; border-radius: 10px; display: inline-block; background-color: cornsilk">&nbsp{{ $pokemons[$i]->type2 }}&nbsp</p>
                                     </div>
