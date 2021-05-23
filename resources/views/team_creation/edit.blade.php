@@ -117,6 +117,10 @@
 @push('layout_end_body')
 
 <script>
+    var members_info = {!! json_encode($members_info) !!};
+
+    //console.log(members_info);
+
     function changeMoves(i) {
         let pokemon = document.getElementById("pokemon"+i).value;
         $.ajax({

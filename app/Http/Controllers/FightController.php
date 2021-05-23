@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Team;
 use App\Models\Pokemon;
+
 use App\Events\JoinedRoom;
 use App\Events\ReceivePokemon;
 use App\Events\PokemonSwap;
 use App\Events\StartFight;
 use App\Events\ProcessTurn;
+
+use Illuminate\Support\Str;
 
 
 class FightController extends Controller
@@ -24,7 +27,23 @@ class FightController extends Controller
         $user = auth()->user();
         $pokemons = $team->pokemons()->paginate(6);
 
-        return view('fight.fightroom', ['team' => $team, 'roomId' => $roomId, 'pokemons' => $pokemons]);
+        $move_info=array();
+
+        foreach($pokemons as $pokemon){
+            $moves=array();
+            $info = app('App\\Http\Controllers\PokeapiController')->pokeapiMove(Str::lower($pokemon->move1));
+            array_push($moves, $info);
+            $info = app('App\\Http\Controllers\PokeapiController')->pokeapiMove(Str::lower($pokemon->move2));
+            array_push($moves, $info);
+            $info = app('App\\Http\Controllers\PokeapiController')->pokeapiMove(Str::lower($pokemon->move3));
+            array_push($moves, $info);
+            $info = app('App\\Http\Controllers\PokeapiController')->pokeapiMove(Str::lower($pokemon->move4));
+            array_push($moves, $info);
+
+            array_push($move_info, $moves);
+        }
+
+        return view('fight.fightroom', ['team' => $team, 'roomId' => $roomId, 'pokemons' => $pokemons, 'move_info' => $move_info]);
     }
 
     public function joinRoom(Request $request, Team $team)
@@ -32,7 +51,24 @@ class FightController extends Controller
         $user = auth()->user();
         $pokemons = $team->pokemons()->paginate(6);
         broadcast(new JoinedRoom($user, $team, $request->input('roomId')))->toOthers();
-        return view('fight.fightroom', ['team' => $team, 'roomId' => $request->input('roomId'), 'pokemons' => $pokemons]);
+
+        $move_info=array();
+
+        foreach($pokemons as $pokemon){
+            $moves=array();
+            $info = app('App\\Http\Controllers\PokeapiController')->pokeapiMove(Str::lower($pokemon->move1));
+            array_push($moves, $info);
+            $info = app('App\\Http\Controllers\PokeapiController')->pokeapiMove(Str::lower($pokemon->move2));
+            array_push($moves, $info);
+            $info = app('App\\Http\Controllers\PokeapiController')->pokeapiMove(Str::lower($pokemon->move3));
+            array_push($moves, $info);
+            $info = app('App\\Http\Controllers\PokeapiController')->pokeapiMove(Str::lower($pokemon->move4));
+            array_push($moves, $info);
+
+            array_push($move_info, $moves);
+        }
+
+        return view('fight.fightroom', ['team' => $team, 'roomId' => $request->input('roomId'), 'pokemons' => $pokemons, 'move_info' => $move_info]);
     }
 
     public function receive(Request $request)

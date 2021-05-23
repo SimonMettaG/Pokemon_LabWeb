@@ -36,21 +36,27 @@ Route::get('/test', function () {
 
 
 Route::resource('teams', 'TeamController')
-                                    ->middleware('logged');
+    ->middleware('logged');
 
 Route::get('pokeapi/{pokemon}', 'PokeapiController@pokeapi')
-                                    ->middleware('logged')
-                                    ->name('pokeapi.get');
+    ->middleware('logged')
+    ->name('pokeapi.get');
+
 Route::get('pokeapi', 'PokeapiController@pokeapiAll')
-                                    ->middleware('logged')
-                                    ->name('pokeapi.getAll');
+    ->middleware('logged')
+    ->name('pokeapi.getAll');
+    
 Route::get('pokeapi2', 'PokeapiController@pokeapi')
-                                    ->middleware('logged')
-                                    ->name('pokeapi.getOne');
+    ->middleware('logged')
+    ->name('pokeapi.getOne');
+
+Route::get('pokeApiMoves', 'PokeapiController@pokeapiMove')
+    ->middleware('logged')
+    ->name('pokeApi.moves');
 
 Route::post('pokemonUpdate/{pokemon}/{id}', 'PokemonController@update')
-                                    ->middleware('logged')
-                                    ->name('pokemon.update');
+    ->middleware('logged')
+    ->name('pokemon.update');
 
 Route::post('pokemonMoves', 'PokemonController@moves')
     ->name('pokemon.moves');

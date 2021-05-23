@@ -24,4 +24,12 @@ class PokeapiController extends Controller
         }
         return $names;
     }
+
+    public function pokeapiMove($move){
+        $api = new PokeApi;
+        $response = $api->move($move);
+        $moveData = json_decode($response);
+
+        return $moveData;
+    }
 }

@@ -22,7 +22,7 @@
                         <div class="col text-center">
                             <div class="row" style="margin-top: 5px;">
                                 <div class="container" style="text-align: center;">
-                                    <button id="mainM1" value="{{$pokemons[0]->move1}}" class="btn btn-primary" style="width: 100%">{{$pokemons[0]->move1}}</button>
+                                    <button onclick="" id="mainM1" value="{{$pokemons[0]->move1}}" class="btn btn-primary" style="width: 100%">{{$pokemons[0]->move1}}</button>
                                 </div>
                             </div>
                             <div class="row" style="margin-top: 5px;">
@@ -158,42 +158,21 @@
     var roomId = {!! json_encode($roomId) !!};
     var team = {!! json_encode($team) !!};
     var pokemons = {!! json_encode($pokemons) !!};
+    var move_info = {!! json_encode($move_info) !!};
+
+    console.log(move_info);
 
     let turn = 0;
     let host=1;
     let currentMove={};
     let opMove={};
     let round=0;
-    
-    function sendMessage(roomId) {
-        let theDescription = $('#message').val();
-        $.ajax({
-            url: '{{ route('fight.postFightMessage') }}',
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            data: {
-                message: theDescription,
-                roomId: roomId
-            }
-        })
-        .done(function(response) {
-            $('#message').val('');
 
+    /*
 
-            console.log(response);
-        })
-        .fail(function(jqXHR, response) {
-            console.log('Fallido', response);
-        });
-    }
+    Event listeners
 
-    Echo.private("chat."+roomId)
-        .listen('MessageSent', function(data) {
-            //console.log(data);
-        });
+    */
 
     Echo.join("join."+roomId)
         .here((users) => {
@@ -254,7 +233,7 @@
         .listen('JoinedRoom', function(data) {
             var i = 1;
             //console.log("Soy anfitrion");
-            //console.log(data.pokemons);
+            
             var pokemonArray = data.pokemons.data;
             $('#teamName').html('Team: '+data.team.name);
             $('#pokemonImage0').attr('src', pokemonArray[0].image);
@@ -456,6 +435,45 @@
       
     }
 
+    function skipSwap(){
+        if(turn==1){
+            turn=0;
+
+            if(host==1){
+                $('#noSwap').remove();
+            }
+            else{
+                $('#centralButtons').html('<div class="alert alert-success"><p>Waiting for host...</p></div>'+
+                '<a href="{{ route('teams.index') }}" class="btn btn-danger">GIVE UP</a><br>');
+            }
+
+            $.ajax({
+                url: '{{ route('fight.changePokemon') }}',
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    mainPokemonID: pokemons.data[0].id,
+                    benchPokemonID : pokemons.data[0].id,
+                    position : 0,
+                    roomId: roomId
+                }
+            })
+            .done(function(response) {
+                
+                console.log(response);
+            })
+            .fail(function(jqXHR, response) {
+                console.log('Fallido', response);
+            });
+        }
+        else{
+            alert("You already swapped");
+        }
+    }
+
     function processOpAction(){
         if(turn==0){
             round+=1;
@@ -516,45 +534,6 @@
                 data.benchPokemonID.name+'<br><br>HP<br><br><label id="benchHPAlt'+i+'" value="'+benchHP+'">'+benchHP+'</label><br><br>'
                 + data.benchPokemonID.move1+'<br><br>'+ data.benchPokemonID.move2+'<br><br>'+ data.benchPokemonID.move3+'<br><br>'+ data.benchPokemonID.move4
             );
-        }
-    }
-
-    function skipSwap(){
-        if(turn==1){
-            turn=0;
-
-            if(host==1){
-                $('#noSwap').remove();
-            }
-            else{
-                $('#centralButtons').html('<div class="alert alert-success"><p>Waiting for host...</p></div>'+
-                '<a href="{{ route('teams.index') }}" class="btn btn-danger">GIVE UP</a><br>');
-            }
-
-            $.ajax({
-                url: '{{ route('fight.changePokemon') }}',
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                data: {
-                    mainPokemonID: pokemons.data[0].id,
-                    benchPokemonID : pokemons.data[0].id,
-                    position : 0,
-                    roomId: roomId
-                }
-            })
-            .done(function(response) {
-                
-                console.log(response);
-            })
-            .fail(function(jqXHR, response) {
-                console.log('Fallido', response);
-            });
-        }
-        else{
-            alert("You already swapped");
         }
     }
 
