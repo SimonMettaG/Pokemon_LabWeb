@@ -73,12 +73,18 @@ class TeamController extends Controller
         
         foreach ($pokemonArray as $pokemon) {
             $info = app('App\\Http\Controllers\PokeapiController')->pokeapi(Str::lower($pokemon));
+            
             if (count($info->types)>1) {
                 $type2 = Str::title($info->types[1]->type->name);
             }
             else {
                 $type2 = "Null";
             }
+
+            $hp_stat = $info->stats[0]->base_stat;
+
+            $hp = ((2*$hp_stat*50)/100)+60;
+
             if(count($info->moves)==0){
                 $team->pokemons()->create([
             
@@ -89,7 +95,8 @@ class TeamController extends Controller
                     'move2' => 'No attack',
                     'move3' => 'No attack',
                     'move4' => 'No attack',
-                    'image' => $info->sprites->front_default
+                    'image' => $info->sprites->front_default,
+                    'hp' => $hp
                 ],);
             }
             else if(count($info->moves)<4){
@@ -102,7 +109,8 @@ class TeamController extends Controller
                     'move2' => Str::title($info->moves[0]->move->name),
                     'move3' => Str::title($info->moves[0]->move->name),
                     'move4' => Str::title($info->moves[0]->move->name),
-                    'image' => $info->sprites->front_default
+                    'image' => $info->sprites->front_default,
+                    'hp' => $hp
                 ],);
             }
             else{
@@ -115,7 +123,8 @@ class TeamController extends Controller
                     'move2' => Str::title($info->moves[1]->move->name),
                     'move3' => Str::title($info->moves[2]->move->name),
                     'move4' => Str::title($info->moves[3]->move->name),
-                    'image' => $info->sprites->front_default
+                    'image' => $info->sprites->front_default,
+                    'hp' => $hp
                 ],);
             } 
         }

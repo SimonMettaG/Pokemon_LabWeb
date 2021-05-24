@@ -20,7 +20,7 @@
                         </div>
                         <div class="col-7">
                             <div class="container" style="text-align: center">
-                                <h5>{{ $pokemons[$i]->name }}</h5>
+                                <h6>{{ $pokemons[$i]->name }} ({{$pokemons[$i]->hp }} HP)</h6>
                             </div>
                             <div class="row" style="margin-left: -50px">
                                 <div class="col">
@@ -80,7 +80,7 @@
                         </div>
                         <div class="col-7">
                             <div class="container" style="text-align: center">
-                                <h5>{{ $pokemons[$i]->name }}</h5>
+                                <h6>{{ $pokemons[$i]->name }} ({{$pokemons[$i]->hp }} HP)</h6>
                             </div>
                             <div class="row" style="margin-left: -50px">
                                 <div class="col">

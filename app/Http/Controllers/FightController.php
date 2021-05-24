@@ -11,6 +11,7 @@ use App\Events\ReceivePokemon;
 use App\Events\PokemonSwap;
 use App\Events\StartFight;
 use App\Events\ProcessTurn;
+use App\Events\SendMove;
 
 use Illuminate\Support\Str;
 
@@ -94,6 +95,16 @@ class FightController extends Controller
         $mainPokemon = Pokemon::find($res['mainPokemonID']);
         $benchPokemon = Pokemon::find($res['benchPokemonID']);
         broadcast(new PokemonSwap($user, $mainPokemon, $benchPokemon, $res['position'], $request->input('roomId')))->toOthers();
+        
+        return [$res];
+    }
+
+    public function sendMove(Request $request)
+    {
+        $user = auth()->user();
+        $res = $request->input();
+        broadcast(new SendMove($user, $res['name'], $res['power'], $res['type'], $request->input('roomId')))->toOthers();
+        //broadcast(new SendMove($user, $request->input('roomId')))->toOthers();
         
         return [$res];
     }

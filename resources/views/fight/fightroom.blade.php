@@ -17,27 +17,39 @@
                     <br>
                     <div class="row">
                         <div class="col">
-                            <img id="mainImage"  value="{{$pokemons[0]->id}}" src="{{$pokemons[0]->image}}" alt="" class="rounded" style="border: 1px black solid; background-color: white;" height="200px" width="200px">
+                            <img id="mainImage" name="0" value="{{$pokemons[0]->id}}" src="{{$pokemons[0]->image}}" alt="" class="rounded" style="border: 1px black solid; background-color: white;" height="200px" width="200px">
                         </div>
                         <div class="col text-center">
                             <div class="row" style="margin-top: 5px;">
                                 <div class="container" style="text-align: center;">
-                                    <button onclick="" id="mainM1" value="{{$pokemons[0]->move1}}" class="btn btn-primary" style="width: 100%">{{$pokemons[0]->move1}}</button>
+                                    <button onclick="makeMove(0)" id="mainM1" value="{{$pokemons[0]->move1}}" class="btn btn-primary"
+                                        style="width: 100%" title="{{Str::title($move_info[0][0]->damage_class->name)}}: {{$move_info[0][0]->power}}">
+                                        {{$pokemons[0]->move1}}
+                                    </button>
                                 </div>
                             </div>
                             <div class="row" style="margin-top: 5px;">
                                 <div class="container" style="text-align: center;">
-                                    <button id="mainM2" value="{{$pokemons[0]->move2}}" class="btn btn-primary" style="width: 100%">{{$pokemons[0]->move2}}</button>
+                                    <button onclick="makeMove(1)" id="mainM2" value="{{$pokemons[0]->move2}}" class="btn btn-primary" 
+                                        style="width: 100%" title="{{Str::title($move_info[0][0]->damage_class->name)}}: {{$move_info[0][1]->power}}">
+                                        {{$pokemons[0]->move2}}
+                                    </button>
                                 </div>
                             </div>
                             <div class="row" style="margin-top: 5px;">
                                 <div class="container" style="text-align: center;">
-                                    <button id="mainM3" value="{{$pokemons[0]->move3}}" class="btn btn-primary" style="width: 100%">{{$pokemons[0]->move3}}</button>
+                                    <button onclick="makeMove(2)" id="mainM3" value="{{$pokemons[0]->move3}}" class="btn btn-primary" 
+                                        style="width: 100%" title="{{Str::title($move_info[0][0]->damage_class->name)}}: {{$move_info[0][2]->power}}">
+                                        {{$pokemons[0]->move3}}
+                                    </button>
                                 </div>
                             </div>
                             <div class="row" style="margin-top: 5px;">
                                 <div class="container" style="text-align: center;">
-                                    <button id="mainM4" value="{{$pokemons[0]->move4}}" class="btn btn-primary" style="width: 100%">{{$pokemons[0]->move4}}</button>
+                                    <button onclick="makeMove(3)" id="mainM4" value="{{$pokemons[0]->move4}}" class="btn btn-primary"
+                                        style="width: 100%" title="{{Str::title($move_info[0][0]->damage_class->name)}}: {{$move_info[0][0]->power}}">
+                                        {{$pokemons[0]->move4}}
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -48,7 +60,7 @@
                     <h4>
                         <label id="mainName" value="{{$pokemons[0]->name}}">{{$pokemons[0]->name}}</label>
                         <label>: HP</label> 
-                        <label id="mainHP" value="[69/420]">[69/420] </label>
+                        <label id="mainHP" value="{{$pokemons[0]->hp}}">[{{$pokemons[0]->hp}}] </label>
                     </h4>
                 </div>
                 <h4>Pokémon:</h4>
@@ -57,10 +69,9 @@
                         @for ($i = 1; $i < 6; $i++)
                         <div class="col col-2" style="margin-left: auto;">
                             <button id="{{'swapButton'.$i}}" class="btn btn-white" style="color: white; background-color: white" onclick="swapPokemon({{$i}}, {{$pokemons[$i]->id}})">
-                                <img id="{{ 'benchImage' . $i }}" src="{{$pokemons[$i]->image}}" alt="" class="rounded" style="border: 1px black solid;" height="50px" width="50px">
+                                <img id="{{ 'benchImage' . $i }}" name="{{$i}}" src="{{$pokemons[$i]->image}}" alt="" class="rounded" style="border: 1px black solid;" height="50px" width="50px">
                                 <p id="{{ 'benchName' . $i }}" style="font-size: x-small; color: black">{{$pokemons[$i]->name}} </p>
-                                <p style="font-size: x-small; color: black">HP </p>
-                                <p id="{{ 'benchHP' . $i }}" style="font-size: x-small; color: black">[100/100] </p>
+                                <p id="{{ 'benchHP' . $i }}" style="font-size: x-small; color: black" value="{{$pokemons[$i]->hp}}">HP [{{$pokemons[$i]->hp}}] </p>
                                 <p id="{{ 'benchMove1' . $i }}" style="font-size: x-small; color: black">{{$pokemons[$i]->move1}} </p>
                                 <p id="{{ 'benchMove2' . $i }}" style="font-size: x-small; color: black">{{$pokemons[$i]->move2}} </p>
                                 <p id="{{ 'benchMove3' . $i }}" style="font-size: x-small; color: black">{{$pokemons[$i]->move3}} </p>
@@ -121,7 +132,7 @@
                 </div>
                 <br>
                 <div class="container" style="text-align: center;">
-                    <h4 id="{{ 'pokemonName0'}}">[Pokémon] : HP [?/?]</h4>
+                    <h4 id="{{ 'pokemonName0'}}">[Pokémon] : HP [?]</h4>
                 </div>
                 <h4>Pokémon:</h4>
                 <div class="container" style="text-align: center;">
@@ -130,7 +141,7 @@
                         <div id="{{ 'pokemonSlot' . $i }}" class="col col-2" style="margin-left: auto;">
                             <button class="btn btn-white" style="color: white; background-color: white;">
                                 <img id="{{ 'pokemonImage' . $i }}"  alt="" class="rounded" style="border: 1px black solid;" height="50px" width="50px">
-                                <p id="{{ 'pokemonName' . $i }}" style="font-size: x-small; color: black">Pokémon {{$i}}<br>HP [100/100]
+                                <p id="{{ 'pokemonName' . $i }}" style="font-size: x-small; color: black">Pokémon {{$i}}<br>HP [?]
                             </button>
                         </div>
                         @endfor
@@ -155,18 +166,24 @@
 @push('layout_end_body')
 
 <script>
-    var roomId = {!! json_encode($roomId) !!};
-    var team = {!! json_encode($team) !!};
-    var pokemons = {!! json_encode($pokemons) !!};
-    var move_info = {!! json_encode($move_info) !!};
+    let roomId = {!! json_encode($roomId) !!};
+    let team = {!! json_encode($team) !!};
+    let pokemons = {!! json_encode($pokemons) !!};
+    let move_info = {!! json_encode($move_info) !!};
 
-    console.log(move_info);
-
-    let turn = 0;
+    let turn = 1;
     let host=1;
     let currentMove={};
     let opMove={};
     let round=0;
+    let moves_object={};
+
+    for(let i=0; i<6; i++){
+        //console.log(pokemons.data[i].name);
+        moves_object[pokemons.data[i].name]=move_info[i];
+    }
+
+    //console.log(moves_object);
 
     /*
 
@@ -237,7 +254,7 @@
             var pokemonArray = data.pokemons.data;
             $('#teamName').html('Team: '+data.team.name);
             $('#pokemonImage0').attr('src', pokemonArray[0].image);
-            $('#pokemonName0').html(pokemonArray[0].name+': HP <label id="mainHPAlt" value="[69/420]">[69/420]</label>');
+            $('#pokemonName0').html(pokemonArray[0].name+': HP <label id="mainHPAlt" value="'+pokemonArray[0].hp+'">['+pokemonArray[0].hp+']</label>');
             $('#mainM1Alt').html(pokemonArray[0].move1);
             $('#mainM2Alt').html(pokemonArray[0].move2);
             $('#mainM3Alt').html(pokemonArray[0].move3);
@@ -248,7 +265,7 @@
             for(i; i<6; i++){
                 $('#pokemonImage'+i).attr('src', pokemonArray[i].image);
                 $('#pokemonName'+i).html(
-                    pokemonArray[i].name+'<br><br>HP<br><br><label id="benchHPAlt'+i+'" value="[100/100]">[100/100]</label><br><br>'
+                    pokemonArray[i].name+'<br><br><label id="benchHPAlt'+i+'" value="'+pokemonArray[i].hp+'">HP ['+pokemonArray[i].hp+']</label><br><br>'
                     + pokemonArray[i].move1+'<br><br>'+ pokemonArray[i].move2+'<br><br>'+ pokemonArray[i].move3+'<br><br>'+ pokemonArray[i].move4
                 );
             }
@@ -266,7 +283,7 @@
             var pokemonArray = data.pokemons.data;
             $('#teamName').html('Team: '+data.team.name);
             $('#pokemonImage0').attr('src', pokemonArray[0].image);
-            $('#pokemonName0').html(pokemonArray[0].name+': HP <label id="mainHPAlt" value="[69/420]">[69/420]</label>');
+            $('#pokemonName0').html(pokemonArray[0].name+': HP <label id="mainHPAlt" value="'+pokemonArray[0].hp+'">['+pokemonArray[0].hp+']</label>');
             $('#mainM1Alt').html(pokemonArray[0].move1);
             $('#mainM2Alt').html(pokemonArray[0].move2);
             $('#mainM3Alt').html(pokemonArray[0].move3);
@@ -277,7 +294,7 @@
             for(i; i<6; i++){
                 $('#pokemonImage'+i).attr('src', pokemonArray[i].image);
                 $('#pokemonName'+i).html(
-                    pokemonArray[i].name+'<br><br>HP<br><br><label id="benchHPAlt'+i+'" value="[100/100]">[100/100]</label><br><br>'
+                    pokemonArray[i].name+'<br><br><label id="benchHPAlt'+i+'" value="'+pokemonArray[i].hp+'">HP ['+pokemonArray[i].hp+']</label><br><br>'
                     + pokemonArray[i].move1+'<br><br>'+ pokemonArray[i].move2+'<br><br>'+ pokemonArray[i].move3+'<br><br>'+ pokemonArray[i].move4
                 );
             }
@@ -286,6 +303,19 @@
     Echo.private("swap."+roomId)
         .listen('PokemonSwap', function(data) {
             opMove={type: "swap", data: data};
+
+            if(host){
+                $('#waiting').remove();
+                $('#continueButton').html('<div id="continueButton"><button onclick="processOpAction()" class="btn btn-primary">CONTINUE</button></div>');
+            }
+        }
+    );
+
+    Echo.private("physical-special."+roomId)
+        .listen('SendMove', function(data) {
+            opMove={type: "phySpe", data: data};
+
+            console.log(data);
 
             if(host){
                 $('#waiting').remove();
@@ -356,31 +386,39 @@
         let mainPokemonName = $('#mainName').attr('value');
         let mainPokemonHP = $('#mainHP').attr('value');
         let mainPokemonID = $('#mainImage').attr('value');
+        let mainPokemonIndex = $('#mainImage').attr('name');
         
         let benchPokemonImage = $( '#benchImage' + id).attr('src');
-        let benchPokemonHP = $( '#benchHP' + id).text();
+        let benchPokemonHP = $( '#benchHP' + id).attr('value');
         let benchPokemonName = $( '#benchName' + id).text();
         let benchPokemonMove1 = $( '#benchMove1' + id).text();
         let benchPokemonMove2 = $( '#benchMove2' + id).text();
         let benchPokemonMove3 = $( '#benchMove3' + id).text();
         let benchPokemonMove4 = $( '#benchMove4' + id).text();
+        let benchPokemonIndex = $('#benchImage'+ id).attr('name');
         
         $('#mainImage').attr('src', benchPokemonImage);
         $('#mainM1').html(benchPokemonMove1);
         $('#mainM1').val(benchPokemonMove1);
+        $('#mainM1').attr('title', move_info[benchPokemonIndex][0]['damage_class']['name']+':'+move_info[benchPokemonIndex][0]['power']);
         $('#mainM2').html(benchPokemonMove2);
         $('#mainM2').val(benchPokemonMove2);
+        $('#mainM2').attr('title', move_info[benchPokemonIndex][1]['damage_class']['name']+':'+move_info[benchPokemonIndex][1]['power']);
         $('#mainM3').html(benchPokemonMove3);
         $('#mainM3').val(benchPokemonMove3);
+        $('#mainM3').attr('title', move_info[benchPokemonIndex][2]['damage_class']['name']+':'+move_info[benchPokemonIndex][2]['power']);
         $('#mainM4').html(benchPokemonMove4);
         $('#mainM4').val(benchPokemonMove4);
+        $('#mainM4').attr('title', move_info[benchPokemonIndex][3]['damage_class']['name']+':'+move_info[benchPokemonIndex][3]['power']);
         $('#mainName').attr('value', benchPokemonName);
         $('#mainName').html(benchPokemonName);
         $('#mainHP').attr('value', benchPokemonHP);
-        $('#mainHP').html(benchPokemonHP);
+        $('#mainHP').html('['+benchPokemonHP+']');
         $('#mainImage').attr('value', dbID);
+        $('#mainImage').attr('name', benchPokemonIndex);
 
         $('#benchImage'+ id).attr('src', mainPokemonImage);
+        $('#benchImage'+ id).attr('name', mainPokemonIndex);
         $('#benchMove1'+ id).html(mainPokemonM1);
         $('#benchMove1'+ id).val(mainPokemonM1);
         $('#benchMove2'+ id).html(mainPokemonM2);
@@ -392,11 +430,11 @@
         $('#benchName'+ id).attr('value', mainPokemonName);
         $('#benchName'+ id).html(mainPokemonName);
         $('#benchHP'+ id).attr('value', mainPokemonHP);
-        $('#benchHP'+ id).html(mainPokemonHP);
+        $('#benchHP'+ id).html('HP ['+mainPokemonHP+']');
         $('#swapButton'+id).attr('onclick', "swapPokemon("+id+","+mainPokemonID+")");
         
         currentMove={type:"swap", mainPokemonID : dbID, benchPokemonID  : mainPokemonID, position : id};
-        console.log(currentMove);
+        //console.log(currentMove);
 
         if(host==0){
             if(round==0){
@@ -425,8 +463,7 @@
             }
         })
         .done(function(response) {
-            
-            console.log(response);
+            //console.log(response);
         })
         .fail(function(jqXHR, response) {
             console.log('Fallido', response);
@@ -472,6 +509,37 @@
         else{
             alert("You already swapped");
         }
+    }
+
+    function makeMove(moveNumber){
+        //if(round>0){
+            let mainPokemonIndex = $('#mainImage').attr('name');
+            let move_stats = move_info[mainPokemonIndex][moveNumber];
+
+            console.log(move_stats);
+
+            $.ajax({
+                    url: '{{ route('fight.sendMove') }}',
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        name: move_stats.name,
+                        power: move_stats.power,
+                        type: move_stats.type.name,
+                        roomId: roomId,
+                    }
+                })
+                .done(function(response) {
+                    
+                    console.log(response);
+                })
+                .fail(function(jqXHR, response) {
+                    console.log('Fallido', response);
+                });
+        //}
     }
 
     function processOpAction(){
@@ -522,7 +590,7 @@
 
             $('#teamName').html('Team: '+data.mainPokemonID.name);
             $('#pokemonImage0').attr('src', data.mainPokemonID.image);
-            $('#pokemonName0').html(data.mainPokemonID.name+': HP <label id="mainHPAlt" value="'+mainHP+'">'+mainHP+'</label>');
+            $('#pokemonName0').html(data.mainPokemonID.name+': HP <label id="mainHPAlt" value="'+mainHP+'">['+mainHP+']</label>');
 
             $('#mainM1Alt').html(data.mainPokemonID.move1);
             $('#mainM2Alt').html(data.mainPokemonID.move2);
@@ -531,7 +599,7 @@
 
             $('#pokemonImage'+i).attr('src', data.benchPokemonID.image);
             $('#pokemonName'+i).html(
-                data.benchPokemonID.name+'<br><br>HP<br><br><label id="benchHPAlt'+i+'" value="'+benchHP+'">'+benchHP+'</label><br><br>'
+                data.benchPokemonID.name+'<br><br><label id="benchHPAlt'+i+'" value="'+benchHP+'">HP ['+benchHP+']</label><br><br>'
                 + data.benchPokemonID.move1+'<br><br>'+ data.benchPokemonID.move2+'<br><br>'+ data.benchPokemonID.move3+'<br><br>'+ data.benchPokemonID.move4
             );
         }
