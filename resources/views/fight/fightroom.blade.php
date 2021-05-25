@@ -23,7 +23,7 @@
                             <div class="row" style="margin-top: 5px;">
                                 <div class="container" style="text-align: center;">
                                     <button onclick="makeMove(0)" id="mainM1" value="{{$pokemons[0]->move1}}" class="btn btn-primary"
-                                        style="width: 100%" title="{{Str::title($move_info[0][0]->damage_class->name)}}: {{$move_info[0][0]->power}}">
+                                        style="width: 100%" title="">
                                         {{$pokemons[0]->move1}}
                                     </button>
                                 </div>
@@ -31,7 +31,7 @@
                             <div class="row" style="margin-top: 5px;">
                                 <div class="container" style="text-align: center;">
                                     <button onclick="makeMove(1)" id="mainM2" value="{{$pokemons[0]->move2}}" class="btn btn-primary" 
-                                        style="width: 100%" title="{{Str::title($move_info[0][0]->damage_class->name)}}: {{$move_info[0][1]->power}}">
+                                        style="width: 100%" title="">
                                         {{$pokemons[0]->move2}}
                                     </button>
                                 </div>
@@ -39,7 +39,7 @@
                             <div class="row" style="margin-top: 5px;">
                                 <div class="container" style="text-align: center;">
                                     <button onclick="makeMove(2)" id="mainM3" value="{{$pokemons[0]->move3}}" class="btn btn-primary" 
-                                        style="width: 100%" title="{{Str::title($move_info[0][0]->damage_class->name)}}: {{$move_info[0][2]->power}}">
+                                        style="width: 100%" title="">
                                         {{$pokemons[0]->move3}}
                                     </button>
                                 </div>
@@ -47,7 +47,7 @@
                             <div class="row" style="margin-top: 5px;">
                                 <div class="container" style="text-align: center;">
                                     <button onclick="makeMove(3)" id="mainM4" value="{{$pokemons[0]->move4}}" class="btn btn-primary"
-                                        style="width: 100%" title="{{Str::title($move_info[0][0]->damage_class->name)}}: {{$move_info[0][0]->power}}">
+                                        style="width: 100%" title="">
                                         {{$pokemons[0]->move4}}
                                     </button>
                                 </div>
@@ -172,18 +172,10 @@
     let move_info = {!! json_encode($move_info) !!};
 
     let turn = 1;
-    let host=1;
-    let currentMove={};
-    let opMove={};
+    let host = 1;
+    let currentMove={type: null};
+    let opMove={type: null};
     let round=0;
-    let moves_object={};
-
-    for(let i=0; i<6; i++){
-        //console.log(pokemons.data[i].name);
-        moves_object[pokemons.data[i].name]=move_info[i];
-    }
-
-    //console.log(moves_object);
 
     /*
 
@@ -329,6 +321,12 @@
             $('#centralButtons').html('<div class="alert alert-success"><p>Choose your first pokemon</p></div>'+
             '<button id="noSwap" onclick="skipSwap()" class="btn btn-info">DON\'T SWAP</button><br><br>'+
             '<a href="{{ route('teams.index') }}" class="btn btn-danger">GIVE UP</a><br>');
+
+            $('#mainM1').attr('title', move_info[0][0]['damage_class']['name']+': '+move_info[0][0]['power']);
+            $('#mainM2').attr('title', move_info[0][1]['damage_class']['name']+': '+move_info[0][1]['power']);
+            $('#mainM3').attr('title', move_info[0][2]['damage_class']['name']+': '+move_info[0][2]['power']);
+            $('#mainM4').attr('title', move_info[0][3]['damage_class']['name']+': '+move_info[0][3]['power']);
+
             turn=1;   
         }
     );
@@ -339,6 +337,14 @@
             if(opMove.type=="swap"){
                 processSwap();
             }
+            else if(opMove.type=="phySpe"){
+                processOpPhySpeAttack();
+            }
+
+            if(currentMove.type=="phySpe"){
+                processPhySpeAttack();
+            }
+
             $('#centralButtons').html('<div class="alert alert-success"><p>Round '+round+'</p></div>'+
                     '<div class="alert alert-success"><p>Make your move...</p></div>'+
                     '<a href="{{ route('teams.index') }}" class="btn btn-danger">GIVE UP</a><br>');
@@ -360,13 +366,20 @@
         })
         .done(function(response) {
             
-            console.log(response);
+            //console.log(response);
 
             $('#centralButtons').html('<div class="alert alert-success"><p>Choose your first pokemon</p></div>'+
             '<div id="waiting" class="alert alert-success"><p>Waiting for opponent...</p></div>'+
             '<button id="noSwap" onclick="skipSwap()" class="btn btn-info">DON\'T SWAP</button><br><br>'+
             '<div id="continueButton"><button onclick="processOpAction()" class="btn btn-primary" disabled>CONTINUE</button></div><br><br>'+
             '<a href="{{ route('teams.index') }}" class="btn btn-danger">GIVE UP</a><br>');
+
+            $('#mainM1').attr('title', move_info[0][0]['damage_class']['name']+': '+move_info[0][0]['power']);
+            $('#mainM2').attr('title', move_info[0][1]['damage_class']['name']+': '+move_info[0][1]['power']);
+            $('#mainM3').attr('title', move_info[0][2]['damage_class']['name']+': '+move_info[0][2]['power']);
+            $('#mainM4').attr('title', move_info[0][3]['damage_class']['name']+': '+move_info[0][3]['power']);
+
+
             turn=1;
         })
         .fail(function(jqXHR, response) {
@@ -400,16 +413,16 @@
         $('#mainImage').attr('src', benchPokemonImage);
         $('#mainM1').html(benchPokemonMove1);
         $('#mainM1').val(benchPokemonMove1);
-        $('#mainM1').attr('title', move_info[benchPokemonIndex][0]['damage_class']['name']+':'+move_info[benchPokemonIndex][0]['power']);
+        $('#mainM1').attr('title', move_info[benchPokemonIndex][0]['damage_class']['name']+': '+move_info[benchPokemonIndex][0]['power']);
         $('#mainM2').html(benchPokemonMove2);
         $('#mainM2').val(benchPokemonMove2);
-        $('#mainM2').attr('title', move_info[benchPokemonIndex][1]['damage_class']['name']+':'+move_info[benchPokemonIndex][1]['power']);
+        $('#mainM2').attr('title', move_info[benchPokemonIndex][1]['damage_class']['name']+': '+move_info[benchPokemonIndex][1]['power']);
         $('#mainM3').html(benchPokemonMove3);
         $('#mainM3').val(benchPokemonMove3);
-        $('#mainM3').attr('title', move_info[benchPokemonIndex][2]['damage_class']['name']+':'+move_info[benchPokemonIndex][2]['power']);
+        $('#mainM3').attr('title', move_info[benchPokemonIndex][2]['damage_class']['name']+': '+move_info[benchPokemonIndex][2]['power']);
         $('#mainM4').html(benchPokemonMove4);
         $('#mainM4').val(benchPokemonMove4);
-        $('#mainM4').attr('title', move_info[benchPokemonIndex][3]['damage_class']['name']+':'+move_info[benchPokemonIndex][3]['power']);
+        $('#mainM4').attr('title', move_info[benchPokemonIndex][3]['damage_class']['name']+': '+move_info[benchPokemonIndex][3]['power']);
         $('#mainName').attr('value', benchPokemonName);
         $('#mainName').html(benchPokemonName);
         $('#mainHP').attr('value', benchPokemonHP);
@@ -446,6 +459,9 @@
                     '<div class="alert alert-success"><p>Waiting for host...</p></div>'+
                     '<a href="{{ route('teams.index') }}" class="btn btn-danger">GIVE UP</a><br>');
             }
+        }
+        else if(host==1){
+            $('#noSwap').remove();
         }
 
         $.ajax({
@@ -512,13 +528,20 @@
     }
 
     function makeMove(moveNumber){
-        //if(round>0){
+        if(round>0 && turn==1){
+            turn=0;
             let mainPokemonIndex = $('#mainImage').attr('name');
             let move_stats = move_info[mainPokemonIndex][moveNumber];
 
-            console.log(move_stats);
+            //console.log(move_stats);
 
-            $.ajax({
+            if(host==0){
+                $('#centralButtons').html('<div id="waiting" class="alert alert-success"><p>Round '+round+'</p></div>'+
+                        '<div class="alert alert-success"><p>Waiting for host...</p></div>'+
+                        '<a href="{{ route('teams.index') }}" class="btn btn-danger">GIVE UP</a><br>');
+            }
+            if(move_stats.damage_class.name=="physical" || move_stats.damage_class.name=="special"){
+                $.ajax({
                     url: '{{ route('fight.sendMove') }}',
                     method: 'POST',
                     headers: {
@@ -539,7 +562,10 @@
                 .fail(function(jqXHR, response) {
                     console.log('Fallido', response);
                 });
-        //}
+            
+                currentMove={type:"phySpe", name: move_stats.name, power: move_stats.power, typeMove: move_stats.type.name};
+            }
+        }
     }
 
     function processOpAction(){
@@ -567,9 +593,17 @@
             .fail(function(jqXHR, response) {
                 console.log('Fallido', response);
             });
+
             if(opMove.type=="swap"){
                 processSwap();
             }
+            else if(opMove.type=="phySpe"){
+                processOpPhySpeAttack();
+            }
+            if(currentMove.type=="phySpe"){
+                processPhySpeAttack();
+            }
+            
             turn = 1;
         }
         else{
@@ -604,6 +638,33 @@
             );
         }
     }
+
+    function processOpPhySpeAttack(){
+        let mainPokemonHP = $('#mainHP').attr('value');
+
+        let newHP = mainPokemonHP-opMove.data.power;
+
+        if(newHP < 0){
+            newHP = 0;
+        }
+
+        $('#mainHP').attr('value', newHP);
+        $('#mainHP').html('['+newHP+']');
+    }
+    
+    function processPhySpeAttack(){
+        let opPokemonHP = $('#mainHPAlt').attr('value');
+
+        let newHP = opPokemonHP-currentMove.power;
+
+        if(newHP < 0){
+            newHP = 0;
+        }
+
+        $('#mainHPAlt').attr('value', newHP);
+        $('#mainHPAlt').html('['+newHP+']');
+    }
+    
 
 </script>
 
