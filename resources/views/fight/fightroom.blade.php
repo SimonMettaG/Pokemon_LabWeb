@@ -992,7 +992,7 @@
         switch(opMove.data.power){
             case "0":
                 //alert(mainPokemonName+" is asleep.");
-                $('#battleLog').append('Your '+mainPokemonName+' was affected by '+opMove.data.name+'and is now asleep.\n');
+                $('#battleLog').append('Your '+mainPokemonName+' was affected by '+opMove.data.name+' and is now asleep.\n');
                 sleep=true;
                 break;
             case "1":
