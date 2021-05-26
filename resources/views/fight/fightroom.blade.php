@@ -1026,11 +1026,8 @@
         let mainPokemonIndex = $('#mainImage').attr('name');
         let mainOpIndex = $('#pokemonImage0').attr('name');
 
-        console.log('aaa');
-        console.log(currentMove);
-
         switch(currentMove.power){
-            case 0 || "0":
+            case 0 || "0": 
                 $('#battleLog').append('The opponent\'s pokémon is now asleep.\n');
                 break;
             case 1 || "1":
@@ -1049,6 +1046,10 @@
                 defenseOp[mainOpIndex]/=1.5;
                 break;
             default:
+                if (currentMove.power == 0) {
+                    $('#battleLog').append('The opponent\'s pokémon is now asleep.\n');
+                }
+                //$('#battleLog').append('The opponent\'s pokémon is now asleep.\n');
                 break;
         }
     }
