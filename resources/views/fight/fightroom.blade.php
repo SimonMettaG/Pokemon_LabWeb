@@ -267,7 +267,9 @@
             })
             .done(function(response) {
                 alert("Player left: "+user.name);
-                console.log(response);
+                //console.log(response);
+
+                $('#battleLog').append('The opponent left. You won.\n');
 
                 $('#centralButtons').html('<div class="alert alert-success"><p>'+response.success
                 +'</p></div><a href="{{ route('teams.index') }}" class="btn btn-danger">EXIT ROOM</a>');
@@ -409,18 +411,25 @@
                 processStatus();
             }
 
+
             if(livingPokemon<=0 && opponentPokemon<=0){
                 alert("The match ended in a draw.");
+
+                $('#battleLog').append('The battle ended in a draw.\n');
 
                 $('#centralButtons').html('<div class="alert alert-warning"><p>Draw.</p></div><a href="{{ route('teams.index') }}" class="btn btn-danger">EXIT ROOM</a>');
             }
             else if(livingPokemon<=0){
                 alert("All your pokémon fainted. You lost.");
 
+                $('#battleLog').append('The battle ended. You lost.\n');
+
                 $('#centralButtons').html('<div class="alert alert-danger"><p>You lost.</p></div><a href="{{ route('teams.index') }}" class="btn btn-danger">EXIT ROOM</a>');
             }
             else if(opponentPokemon<=0){
                 alert("Enemy team defeated. You won!");
+
+                $('#battleLog').append('The battle ended. You won.\n');
 
                 $('#centralButtons').html('<div class="alert alert-success"><p>Enemy team defeated. You won!</p></div><a href="{{ route('teams.index') }}" class="btn btn-danger">EXIT ROOM</a>');
             }
@@ -695,7 +704,7 @@
             }
 
             if(sleep==true){
-                console.log("Move while sleeping");
+                //console.log("Move while sleeping");
                 $.ajax({
                     url: '{{ route('fight.sendMove') }}',
                     method: 'POST',
@@ -721,6 +730,8 @@
                 sleep=false;
             
                 currentMove={type:"phySpe", name: move_stats.name, power: 0, typeMove: move_stats.type.name};
+
+                $('#battleLog').append('Your '+mainPokemonName+' used '+move_stats.name+' but it was asleep.\n');
 
                 return 0;
             }
@@ -784,6 +795,8 @@
                 });
             
                 currentMove={type:"status", name: move_stats.name, power: statusMoves[move_stats.name][0], typeMove: "status"};
+
+                $('#battleLog').append('Your '+mainPokemonName+' used '+move_stats.name+' with status effect '+statusMoves[move_stats.name][1]+'.\n');
             }
         }
     }
@@ -828,19 +841,25 @@
             }
 
             if(livingPokemon<=0 && opponentPokemon<=0){
-                alert("The match ended in a draw.");
+                alert("The battle ended in a draw.");
 
                 $('#centralButtons').html('<div class="alert alert-warning"><p>Draw.</p></div><a href="{{ route('teams.index') }}" class="btn btn-danger">EXIT ROOM</a>');
+
+                $('#battleLog').append('The battle ended in a draw.\n');
             }
             else if(livingPokemon<=0){
                 alert("All your pokémon fainted. You lost.");
 
                 $('#centralButtons').html('<div class="alert alert-danger"><p>You lost.</p></div><a href="{{ route('teams.index') }}" class="btn btn-danger">EXIT ROOM</a>');
+
+                $('#battleLog').append('The battle ended. You lost.\n');
             }
             else if(opponentPokemon<=0){
                 alert("Enemy team defeated. You won!");
 
                 $('#centralButtons').html('<div class="alert alert-success"><p>Enemy team defeated. You won!</p></div><a href="{{ route('teams.index') }}" class="btn btn-danger">EXIT ROOM</a>');
+
+                $('#battleLog').append('The battle ended. You won.\n');
             }
             else{
                 $('#centralButtons').html('<div class="alert alert-success"><p>Round '+round+'</p></div>'+
@@ -900,7 +919,8 @@
         let mainPokemonName = $('#mainName').attr('value');
 
         if(opMove.data.power==0){
-            alert("The opponent was asleep and could not attack.");
+            //alert("The opponent was asleep and could not attack.");
+            $('#battleLog').append('The opponent\'s pokémon was asleep and could not attack.\n');
             return 0;
         }
 
@@ -933,9 +953,11 @@
     function processPhySpeAttack(){
         let opPokemonHP = $('#mainHPAlt').attr('value');
         let mainOpIndex = $('#pokemonImage0').attr('name');
+        let mainPokemonName = $('#mainName').attr('value');
 
         if(currentMove.power==0){
-            alert("You were asleep and could not attack.");
+            //alert("You were asleep and could not attack.");
+            $('#battleLog').append('Your '+mainPokemonName+' was asleep and could not attack.\n');
             return 0;
         }
 
@@ -969,25 +991,30 @@
 
         switch(opMove.data.power){
             case "0":
-                alert(mainPokemonName+" is asleep.");
+                //alert(mainPokemonName+" is asleep.");
+                $('#battleLog').append('Your '+mainPokemonName+' was affected by '+opMove.data.name+'and is now asleep.\n');
                 sleep=true;
                 break;
             case "1":
+                $('#battleLog').append('The opponent\'s pokémon got an attack buff.\n');
                 break;
             case "2":
-                alert(mainPokemonName+" got an attack nerf.")
+                //alert(mainPokemonName+" got an attack nerf.")
+                $('#battleLog').append('Your '+mainPokemonName+' was affected by '+opMove.data.name+' and got an attack nerf.\n');
                 attack[mainPokemonIndex]/=1.5;
-                console.log(attack);
+                //console.log(attack);
                 break;
             case "3":
-                alert("Opponent got a defense buff.")
+                //alert("Opponent got a defense buff.")
+                $('#battleLog').append('The opponent\'s pokémon got a defense buff.\n');
                 defenseOp[mainOpIndex]*=1.5;
-                console.log(defenseOp);
+                //console.log(defenseOp);
                 break;
             case "4":
-                alert(mainPokemonName+" got a defense nerf.")
+                //alert(mainPokemonName+" got a defense nerf.")
+                $('#battleLog').append('Your '+mainPokemonName+' was affected by '+opMove.data.name+' and got a defense nerf.\n');
                 defense[mainPokemonIndex]/=1.5;
-                console.log(defense);
+                //console.log(defense);
                 break;
             default:
                 break;
@@ -999,24 +1026,27 @@
         let mainPokemonIndex = $('#mainImage').attr('name');
         let mainOpIndex = $('#pokemonImage0').attr('name');
 
+        console.log('aaa');
+        console.log(currentMove);
+
         switch(currentMove.power){
             case 0 || "0":
+                $('#battleLog').append('The opponent\'s pokémon is now asleep.\n');
                 break;
             case 1 || "1":
-                alert(mainPokemonName+" got an attack buff.")
+                $('#battleLog').append('Your '+mainPokemonName+' got an attack buff.\n');
                 attack[mainPokemonIndex]*=1.5;
-                console.log(attack);
                 break;
             case 2 || "2":
+                $('#battleLog').append('The opponent\'s pokémon got an attack nerf.\n');
                 break;
             case 3 || "3":
-                alert(mainPokemonName+" got a defense buff.")
+                $('#battleLog').append('Your '+mainPokemonName+' got a defense buff.\n');
                 defense[mainPokemonIndex]*=1.5;
-                console.log(defense);
                 break;
             case 4 || "4":
+                $('#battleLog').append('The opponent\'s pokémon got a defense nerf.\n');
                 defenseOp[mainOpIndex]/=1.5;
-                console.log(defenseOp);
                 break;
             default:
                 break;
