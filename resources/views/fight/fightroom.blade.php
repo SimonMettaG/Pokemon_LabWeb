@@ -347,7 +347,7 @@
 
     Echo.private("physical-special."+roomId)
         .listen('SendMove', function(data) {
-            console.log(data);
+            //console.log(data);
             if(data.type=="status"){
                 opMove={type: "status", data: data};
             }
@@ -355,7 +355,7 @@
                 opMove={type: "phySpe", data: data};
             }
 
-            console.log(opMove);
+            //console.log(opMove);
 
             if(host){
                 $('#waiting').remove();
@@ -389,9 +389,9 @@
 
     Echo.private("process."+roomId)
         .listen('ProcessTurn', function(data) {
-            console.log("Processing moves");
-            console.log(currentMove);
-            console.log(opMove);
+            //console.log("Processing moves");
+            //console.log(currentMove);
+            //console.log(opMove);
 
             round+=1;
             if(opMove.type=="swap"){
@@ -676,8 +676,8 @@
                 }
             })
             .done(function(response) {
-                
-                console.log(response);
+
+                //console.log(response);
             })
             .fail(function(jqXHR, response) {
                 console.log('Fallido', response);
@@ -721,7 +721,7 @@
                 })
                 .done(function(response) {
                     
-                    console.log(response);
+                    //console.log(response);
                 })
                 .fail(function(jqXHR, response) {
                     console.log('Fallido', response);
@@ -760,7 +760,7 @@
                 })
                 .done(function(response) {
                     
-                    console.log(response);
+                    //console.log(response);
                 })
                 .fail(function(jqXHR, response) {
                     console.log('Fallido', response);
@@ -771,7 +771,7 @@
                 $('#battleLog').append('Your '+mainPokemonName+' used '+move_stats.name+' with a power of '+attackPower+'.\n');
             }
             else if(move_stats.damage_class.name=="status"){
-                console.log("Sent status attack");
+                //console.log("Sent status attack");
                 $.ajax({
                     url: '{{ route('fight.sendMove') }}',
                     method: 'POST',
@@ -788,7 +788,7 @@
                 })
                 .done(function(response) {
                     
-                    console.log(response);
+                    //console.log(response);
                 })
                 .fail(function(jqXHR, response) {
                     console.log('Fallido', response);
@@ -817,7 +817,7 @@
                 }
             })
             .done(function(response) {
-                console.log(response);
+                //console.log(response);
             })
             .fail(function(jqXHR, response) {
                 console.log('Fallido', response);
@@ -874,7 +874,7 @@
             }
         }
         else{
-            console.log(turn);
+            //console.log(turn);
             alert("Do something before continuing")
         }
     }
