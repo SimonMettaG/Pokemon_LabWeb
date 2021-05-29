@@ -509,9 +509,9 @@
         let benchPokemonIndex = $('#benchImage'+ id).attr('name');
 
         let disabled1 = $('#mainM1').prop('disabled');
-        let disabled2 = $('#mainM1').prop('disabled');
-        let disabled3 = $('#mainM1').prop('disabled');
-        let disabled4 = $('#mainM1').prop('disabled');
+        let disabled2 = $('#mainM2').prop('disabled');
+        let disabled3 = $('#mainM3').prop('disabled');
+        let disabled4 = $('#mainM4').prop('disabled');
 
         if(benchPokemonHP==0){
             alert("You can't switch with a fainted pokémon.");
